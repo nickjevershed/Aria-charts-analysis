@@ -38,7 +38,7 @@ button {
 
 <script>
 
-chart("data.csv", "orange");
+chart("genre-count.csv", "orange");
 
 var datearray = [];
 var colorrange = [];
@@ -57,11 +57,10 @@ else if (color == "orange") {
 }
 strokecolor = colorrange[0];
 
-var format = d3.time.format("%m/%d/%y");
 
 var margin = {top: 20, right: 40, bottom: 30, left: 30};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 400 - margin.top - margin.bottom;
+var height = 600 - margin.top - margin.bottom;
 
 var tooltip = d3.select("body")
     .append("div")
@@ -72,7 +71,7 @@ var tooltip = d3.select("body")
     .style("top", "30px")
     .style("left", "55px");
 
-var x = d3.time.scale()
+var x = d3.scale.linear()
     .range([0, width]);
 
 var y = d3.scale.linear()
@@ -115,12 +114,12 @@ var svg = d3.select(".chart").append("svg")
 
 var graph = d3.csv(csvpath, function(data) {
   data.forEach(function(d) {
-    d.date = format.parse(d.date);
+    d.date = +d.date;
     d.value = +d.value;
   });
 
   var layers = stack(nest.entries(data));
-
+  console.log(nest.entries(data));
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
 
@@ -128,7 +127,8 @@ var graph = d3.csv(csvpath, function(data) {
       .data(layers)
     .enter().append("path")
       .attr("class", "layer")
-      .attr("d", function(d) { return area(d.values); })
+      .attr("d", function(d) { 
+        return area(d.values); })
       .style("fill", function(d, i) { return z(i); });
 
 
