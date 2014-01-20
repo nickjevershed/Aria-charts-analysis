@@ -34,6 +34,19 @@ button {
   position: relative;
 }
 
+.filterText {
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.reset {
+
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+}
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v2.js"></script>
@@ -89,11 +102,20 @@ var reset = d3.select(".chart")
     .append("div")
     .attr("class", "reset")
     .style("position", "absolute")
+    .style("z-index", "30")
+    .style("visibility", "hidden")
+    .style("top", "70px")
+    .style("right", "55px");
+
+var filterText = d3.select(".chart")
+    .append("div")
+    .attr("class", "filterText")
+    .style("position", "absolute")
     .style("z-index", "20")
     .style("visibility", "hidden")
-    .style("top", "40px")
-    .style("right", "55px");    
-
+    .style("top", "30px")
+    .style("right", "55px");
+        
 reset.html( "<p>RESET CHART</p>" );
 
 var x = d3.scale.linear()
@@ -204,7 +226,8 @@ var graph = d3.csv(csvpath, function(data) {
               .attr("d", function(d) { 
               return area(d.values); });
 
-            reset.style("visibility", "hidden");        
+            reset.style("visibility", "hidden");
+            filterText.style("visibility", "hidden");         
 
     });    
 
@@ -228,8 +251,9 @@ var graph = d3.csv(csvpath, function(data) {
         .attr("d", function(d) { 
         return area(d.values); })   
 
-      reset.style("visibility", "visible"); 
-
+      reset.style("visibility", "visible");
+      filterText.style("visibility", "visible");  
+      filterText.html( "<p>Showing: " + genreID.replace('_',' ') + "</p>" );
 
     })
     .on("mouseover", function(d, i) {
