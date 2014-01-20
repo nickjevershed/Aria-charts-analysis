@@ -164,6 +164,12 @@ var stack = d3.layout.stack()
     .x(function(d) { return d.date; })
     .y(function(d) { return d.value; });
 
+ var stackArea = d3.layout.stack()
+    .offset("zero")
+    .values(function(d) { return d.values; })
+    .x(function(d) { return d.date; })
+    .y(function(d) { return d.value; });    
+
 var nest = d3.nest()
     .key(function(d) { return d.key; });
 
@@ -235,6 +241,8 @@ var graph = d3.csv(csvpath, function(data) {
   reset
     .on("click", function(d, i) {
 
+     
+
             var selected = svg.selectAll(".layer").data(stack(layers), function(d){ return d.key.replace(/[\s\.]/g,'_') } );
 
             selected
@@ -255,7 +263,7 @@ var graph = d3.csv(csvpath, function(data) {
 
       genreID = d3.select(this).attr("id");
       console.log(genreID);
-      genreData = stack(layers.filter(function(d) { return d.key == genreID.replace('_',' ') }));
+      genreData = stackArea(layers.filter(function(d) { return d.key == genreID.replace('_',' ') }));
       console.log(genreData);
 
       var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
@@ -266,6 +274,7 @@ var graph = d3.csv(csvpath, function(data) {
 
 
       selected
+        .transition()
         .attr("d", function(d) { 
         return area(d.values); })   
 
