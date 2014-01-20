@@ -47,9 +47,27 @@ button {
   cursor: pointer;
 }
 
+.infobox {
+
+  font-size: 12px;
+}
+
+.genre {
+
+  font-size: 16px;
+}
+
+
+.ui-tooltip-content {
+
+  z-index: 60;
+}
 </style>
 <body>
-<script src="http://d3js.org/d3.v2.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/d3.min.js"></script>
+<link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
 
 <div id="chartContainer">
 <div class="chart">
@@ -89,15 +107,6 @@ var catA = ["80s","90s","acoustic","adult contemporary","afrobeat","afropop","al
 var catB = ["acid house","ambient","big beat","breakbeat","breakcore","cyberpunk","dance","dance pop","deep house","disco","disco house","downtempo","drum and bass","dubstep","edm","electro","electro house","electroclash","electronic","electronica","electropop","eurodance","experimental","french house","house","industrial","minimal","new rave","nu disco","synthpop","techno","trance","bounce","club","dancehall","dub","grime","hip hop","r&b","rap","remix","scratch","soul","spoken word","trip hop"]
 
 
-var tooltip = d3.select("body")
-    .append("div")
-    .attr("class", "remove")
-    .style("position", "absolute")
-    .style("z-index", "20")
-    .style("visibility", "hidden")
-    .style("top", "-15px")
-    .style("left", "55px");
-
 var reset = d3.select(".chart")
     .append("div")
     .attr("class", "reset")
@@ -116,7 +125,9 @@ var filterText = d3.select(".chart")
     .style("top", "30px")
     .style("right", "55px");
         
-reset.html( "<p>RESET CHART</p>" );
+reset.html( "<p title='test'>RESET CHART</p>" );
+
+var info;
 
 var x = d3.scale.linear()
     .range([0, width]);
@@ -142,7 +153,7 @@ var xAxis = d3.svg.axis()
     .tickFormat(d3.format("d"));
 
 var yAxis = d3.svg.axis()
-    .scale(y);
+    .scale(y)
 
 var yAxisr = d3.svg.axis()
     .scale(y);
@@ -166,7 +177,9 @@ var svg = d3.select(".chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
+
+
 
 var graph = d3.csv(csvpath, function(data) {
   data.forEach(function(d) {
@@ -175,6 +188,7 @@ var graph = d3.csv(csvpath, function(data) {
   });
 
   var layers = stack(nest.entries(data));
+  console.log(layers);
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
 
@@ -183,6 +197,7 @@ var graph = d3.csv(csvpath, function(data) {
       .data(layers, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
     .enter().append("path")
       .attr("class", "layer")
+      .attr("title", function(d) {return d.key})
       .attr("id", function(d){ return d.key.replace(/[\s\.]/g,'_') } )
       .attr("d", function(d) { 
         return area(d.values); })
@@ -200,7 +215,8 @@ var graph = d3.csv(csvpath, function(data) {
         }
 
       });
-
+  
+  $( ".layer" ).tooltip({content:"<div class='infobox'></div>", track:true});
 
   svg.append("g")
       .attr("class", "x axis")
@@ -230,6 +246,8 @@ var graph = d3.csv(csvpath, function(data) {
             filterText.style("visibility", "hidden");         
 
     });    
+
+  
 
   svg.selectAll(".layer")
     .attr("opacity", 1)
@@ -261,7 +279,9 @@ var graph = d3.csv(csvpath, function(data) {
       .duration(250)
       .attr("opacity", function(d, j) {
         return j != i ? 0.6 : 1;
-    })})
+    })
+
+    })
 
     .on("mousemove", function(d, i) {
       mousex = d3.mouse(this);
@@ -279,9 +299,11 @@ var graph = d3.csv(csvpath, function(data) {
       d3.select(this)
       .classed("hover", true)
       .attr("stroke", strokecolor)
-      .attr("stroke-width", "0.5px"), 
-      tooltip.html( "<p>" + d.key + "<br>" + pro + "%</p>" ).style("visibility", "visible");
-      
+      .attr("stroke-width", "0.5px"); 
+      $(".infobox").html( "<span class='genre'>Genre: " + d.key + "</span><br>Proportion: " + pro + "%<br>Year: " + (invertedx | 0)  );
+
+     
+
     })
     .on("mouseout", function(d, i) {
      svg.selectAll(".layer")
@@ -290,9 +312,10 @@ var graph = d3.csv(csvpath, function(data) {
       .attr("opacity", "1");
       d3.select(this)
       .classed("hover", false)
-      .attr("stroke-width", "0px"), tooltip.html( "<p>" + d.key + "<br>" + pro + "%</p>" ).style("visibility", "hidden");
+      .attr("stroke-width", "0px");
   })
     
+  
   
 });
 }
