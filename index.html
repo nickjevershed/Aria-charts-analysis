@@ -62,16 +62,45 @@ button {
 
   z-index: 60;
 }
+
+#tableWrapper {
+
+      width:940px;
+}
+
+      
+
 </style>
 <body>
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="css/jquery.dataTables.css" />
 
 <div id="chartContainer">
 <div class="chart">
 </div>
+</div>
+
+<div id="tableWrapper">
+<table id="list" width="100%">
+  <thead>
+    <tr>
+      <th class="Year-cell">Year</th>
+      <th class="Rank-cell">Rank</th>
+      <th class="Artist-cell">Artist</th>
+      <th class="Song-cell">Song</th>
+      <th class="Genre1-cell">Genre1</th>
+      <th class="Genre2-cell">Genre2</th>
+    </tr>
+  </thead>
+  <tbody>
+   
+  </tbody>
+ 
+</table>
 </div>
 <script>
 
@@ -309,7 +338,7 @@ var graph = d3.csv(csvpath, function(data) {
       .classed("hover", true)
       .attr("stroke", strokecolor)
       .attr("stroke-width", "0.5px"); 
-      $(".infobox").html( "<span class='genre'>Genre: " + d.key + "</span><br>Proportion: " + pro + "%<br>Year: " + (invertedx | 0)  );
+      $(".infobox").html( "<span class='genre'>Genre: " + d.key + "</span><br>Proportion: " + pro + "%<br>Year: " + (invertedx | 0) + "<br>Click to filter" );
 
      
 
@@ -328,4 +357,27 @@ var graph = d3.csv(csvpath, function(data) {
   
 });
 }
+
+//Data table
+
+var asInitVals = new Array();
+
+      $(document).ready(function() {
+          var oTable = $('#list').dataTable( {
+              "oLanguage": {
+                  "sSearch": "Filter all columns:"
+              },
+              "bProcessing": true,
+              "sAjaxSource": 'hottest100.json',
+              "bScrollInfinite": true,
+              "bScrollCollapse": false,
+              "sScrollY": "600px",
+              "iDisplayLength": 100,
+              "aaSorting": [[0,"desc"]]
+
+          } );
+
+      } );
+
+
 </script>
