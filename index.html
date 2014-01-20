@@ -9,6 +9,7 @@ body {
 
 .chart { 
   background: #fff;
+  width:940px;
 }
 
 .remove p {
@@ -28,14 +29,19 @@ button {
   top: 10px;
 }
 
+.chart {
+
+  position: relative;
+}
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v2.js"></script>
 
-
+<div id="chartContainer">
 <div class="chart">
 </div>
-
+</div>
 <script>
 
 chart("genre-count.csv", "orange");
@@ -78,6 +84,17 @@ var tooltip = d3.select("body")
     .style("visibility", "hidden")
     .style("top", "-15px")
     .style("left", "55px");
+
+var reset = d3.select(".chart")
+    .append("div")
+    .attr("class", "reset")
+    .style("position", "absolute")
+    .style("z-index", "20")
+    .style("visibility", "hidden")
+    .style("top", "40px")
+    .style("right", "55px");    
+
+reset.html( "<p>RESET CHART</p>" );
 
 var x = d3.scale.linear()
     .range([0, width]);
@@ -141,9 +158,10 @@ var graph = d3.csv(csvpath, function(data) {
 
 
   svg.selectAll(".layer")
-      .data(layers)
+      .data(layers, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
     .enter().append("path")
       .attr("class", "layer")
+      .attr("id", function(d){ return d.key.replace(/[\s\.]/g,'_') } )
       .attr("d", function(d) { 
         return area(d.values); })
       .style("fill", function(d, i) { 
@@ -176,8 +194,44 @@ var graph = d3.csv(csvpath, function(data) {
       .attr("class", "y axis")
       .call(yAxis.orient("left"));
 
+  reset
+    .on("click", function(d, i) {
+
+            var selected = svg.selectAll(".layer").data(stack(layers), function(d){ return d.key.replace(/[\s\.]/g,'_') } );
+
+            selected
+              .transition()
+              .attr("d", function(d) { 
+              return area(d.values); });
+
+            reset.style("visibility", "hidden");        
+
+    });    
+
   svg.selectAll(".layer")
     .attr("opacity", 1)
+    .on("click", function(d, i) {
+
+      genreID = d3.select(this).attr("id");
+      console.log(genreID);
+      genreData = stack(layers.filter(function(d) { return d.key == genreID.replace('_',' ') }));
+      console.log(genreData);
+
+      var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
+
+      selected.exit()
+        .transition()
+          .attr("d","M0,0")
+
+
+      selected
+        .attr("d", function(d) { 
+        return area(d.values); })   
+
+      reset.style("visibility", "visible"); 
+
+
+    })
     .on("mouseover", function(d, i) {
       svg.selectAll(".layer").transition()
       .duration(250)
