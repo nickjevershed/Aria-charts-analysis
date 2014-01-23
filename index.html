@@ -102,6 +102,33 @@ display: none;
   position: relative;
 }
 
+.bottomRow {
+
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+#percent1 {
+
+  position: absolute;
+  top: 19px;
+  left: 8px;
+  font-size: 14px;
+  z-index: 60;
+
+}
+
+#percent2 {
+
+ position: absolute;
+  top:19px;
+  right:9px;
+  font-size: 14px;
+  z-index: 60;
+
+}
+
+
 </style>
 
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
@@ -111,7 +138,9 @@ display: none;
 <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="css/jquery.dataTables.css" />
 <body>
-<div id="hottestWrapper">  
+<div id="hottestWrapper">
+<div id="percent1">%</div>
+  <div id="percent2">%</div>  
 <div id="tour">
   <span id="guidedTour">Click next to see key trends, or hover over the chart to explore</span>
   <div id="nextItem">next</div>
@@ -141,11 +170,18 @@ display: none;
  
 </table>
 </div>
+<div class="bottomRow">
+  <h3>Methods</h3>
+  <p>The artist of every song from every Hottest 100 from 1993 to 2012 was automatically assigned to the two most common genres returned from the <a href="http://echonest.com/" target="_parent">Echo Nest API</a>, the same service used by Spotify and Rdio. We also tried assigning genres on a per-song basis using last.fm's API, but found the user-generated genre tags to be unreliable. Once the list of songs with genres was compiled, duplicate genres (eg. alternative, alternative rock) were merged and genres were grouped by year and then converted to a percentage.</p>  
+  <p>The streamgraph visualisation is based on <a href="http://bl.ocks.org/WillTurman/4631136" target="_parent">Will Turman's D3 code</a>.
 
+</div>  
 </div>
 <script>
 
 var genreNeat = "";
+
+var clickTo = "Click to filter";
 
  $.fn.dataTableExt.afnFiltering.push(
       function( oSettings, aData, iDataIndex ) {
@@ -215,7 +251,7 @@ var reset = d3.select(".chart")
     .style("position", "absolute")
     .style("z-index", "30")
     .style("visibility", "hidden")
-    .style("top", "70px")
+    .style("top", "90px")
     .style("right", "55px");
 
 var filterText = d3.select(".chart")
@@ -368,6 +404,7 @@ var graph = d3.csv("genre-count3.csv", function(data) {
             tourItem = 0;
             $("#guidedTour").html("Click next to see key trends, or hover over the chart to explore");
             $("#textTour").fadeOut('fast');
+            clickTo = "Click to filter";
 
   }
 
@@ -396,7 +433,7 @@ var graph = d3.csv("genre-count3.csv", function(data) {
       filterText.style("visibility", "visible");  
       filterText.html( "<p>Showing: " + genreID.replace('_',' ') + "</p>" );
       oTable.fnDraw();
-
+      clickTo = "";
 
 
     })
@@ -426,7 +463,7 @@ var graph = d3.csv("genre-count3.csv", function(data) {
       .classed("hover", true)
       .attr("stroke", strokecolor)
       .attr("stroke-width", "0.5px"); 
-      $(".infobox").html( "<span class='genre'>Genre: " + d.key + "</span><br>Proportion: " + pro + "%<br>Year: " + (invertedx | 0) + "<br>Click to filter" );
+      $(".infobox").html( "<span class='genre'>Genre: " + d.key + "</span><br>Proportion: " + pro + "%<br>Year: " + (invertedx | 0) + "<br>" + clickTo );
 
      
 
@@ -601,7 +638,7 @@ var graph = d3.csv("genre-count3.csv", function(data) {
       $("#textTour").fadeOut('fast');
       $("#textTour").promise().done(function(){
 
-          $("#textTour").html("Pop is a broad category, ranging from Kylie to Regina Spector, but its popularity has increased from 12% to 16% since Triple J started counting down the Hottest 100 by year in 1993. Australians seemed to lose the taste for pop in 2003, where it accounted for only 6% of the total, but the next year it was back decisively, with 18% – thanks in part to Franz Ferdinand (whose Take Me Out was that year’s No 1) and the Scissor Sisters. Latterly, Lily Allen (who had four records in the 100 in 2006 alone) and Gotye (No 1 in 2011) have made pop music more than the guilty pleasure it appeared to be for Australians back in 1993, when it was represented by records including Ace of Base’s All that She Wants and East 17’s Deep.");
+          $("#textTour").html("Pop is a broad category, ranging from Kylie to Regina Spektor, but its popularity has increased from 12% to 16% since Triple J started counting down the Hottest 100 by year in 1993. Australians seemed to lose the taste for pop in 2003, where it accounted for only 6% of the total, but the next year it was back decisively, with 18% – thanks in part to Franz Ferdinand (whose Take Me Out was that year’s No 1) and the Scissor Sisters. Latterly, Lily Allen (who had four records in the 100 in 2006 alone) and Gotye (No 1 in 2011) have made pop music more than the guilty pleasure it appeared to be for Australians back in 1993, when it was represented by records including Ace of Base’s All that She Wants and East 17’s Deep.");
           $("#textTour").fadeIn('fast');
 
         });
