@@ -76,13 +76,16 @@ button {
   width:60px;
   position: absolute;
   right:50px;
+  top:3px;
   z-index: 60;
 
 }
 
 #guidedTour {
 
-  font-size: 20px;
+  font-size: 25px;
+  font-family: Georgia, Times, serif;
+  padding-left:50px;
 }
 
 #textTour {
@@ -110,7 +113,7 @@ display: none;
 <body>
 <div id="hottestWrapper">  
 <div id="tour">
-  <span id="guidedTour">Click next to see some of the key trends</span>
+  <span id="guidedTour">Click next to see key trends, or hover over the chart to explore</span>
   <div id="nextItem">next</div>
 </div>  
 <div id="chartContainer">
@@ -194,16 +197,16 @@ var colorrange = [];
 strokecolor = "black";
 
 var orange = ["#B30000", "#E34A33", "#FC8D59", "#FDBB84", "#FDD49E", "#FEF0D9"];
-var blue = ["#045A8D", "#2B8CBE", "#74A9CF", "#A6BDDB", "#D0D1E6", "#F1EEF6"];
+var blue = ["#f1eef6","#d0d1e6","#a6bddb","#74a9cf","#2b8cbe","#045a8d"];
 var pink = ["#980043", "#DD1C77", "#DF65B0", "#C994C7", "#D4B9DA", "#F1EEF6"];
 
-var margin = {top: 50, right: 30, bottom: 30, left: 30};
+var margin = {top: 15, right: 30, bottom: 30, left: 30};
 var width = 940 - margin.left - margin.right;
 var height = 650 - margin.top - margin.bottom;
 
-var catA = ["80s","90s","acoustic","adult contemporary","afrobeat","afropop","alternative","alternative metal","americana","anti-folk","ballad","big band","black metal","bluegrass","blues","british pop","college rock","comedy","country","cowpunk","dream pop","emo","folk","folk rock","folk-pop","french pop","funk","garage rock","gothic rock","grindcore","grunge","hard rock","hardcore","heavy metal","indie","indie pop","indie rock","industrial metal","industrial rock","instrumental","jazz","lo-fi","lounge","math rock","metal","metalcore","new wave","nu metal","pop","pop punk","pop rock","post-hardcore","post-punk","power pop","progressive metal","progressive rock","psychedelic","psychedelic rock","punk","rap rock","reggae","rock","rock 'n roll","rockabilly","roots","singer-songwriter","ska","soundtrack","southern rock","world"]
+var catA = ["80s","90s","acoustic","adult contemporary","afrobeat","afropop","alternative","alternative metal","americana","anti-folk","ballad","big band","black metal","bluegrass","blues","british pop","college rock","comedy","country","cowpunk","dream pop","emo","folk","folk rock","folk-pop","french pop","funk","garage rock","gothic rock","grindcore","grunge","hard rock","hardcore","heavy metal","indie","indie pop","indie rock","industrial metal","industrial rock","instrumental","jazz","lo-fi","lounge","math rock","metal","metalcore","new wave","nu metal","pop","pop punk","pop rock","post-hardcore","post-punk","power pop","progressive metal","progressive rock","psychedelic","psychedelic rock","punk","rap rock","reggae","rock","rock 'n roll","rockabilly","roots","singer-songwriter","ska","soundtrack","southern rock","world","new rave","soul"]
 
-var catB = ["acid house","ambient","big beat","breakbeat","breakcore","cyberpunk","dance","dance pop","deep house","disco","disco house","downtempo","drum and bass","dubstep","edm","electro","electro house","electroclash","electronic","electronica","electropop","eurodance","experimental","french house","house","industrial","minimal","new rave","nu disco","synthpop","techno","trance","bounce","club","dancehall","dub","grime","hip hop","r&b","rap","remix","scratch","soul","spoken word","trip hop"]
+var catB = ["acid house","ambient","big beat","breakbeat","breakcore","cyberpunk","dance","dance pop","deep house","disco","disco house","downtempo","drum and bass","dubstep","edm","electro","electro house","electroclash","electronic","electronica","electropop","eurodance","experimental","french house","house","industrial","minimal","nu disco","synthpop","techno","trance","bounce","club","dancehall","dub","grime","hip hop","r&b","rap","remix","scratch","spoken word","trip hop"]
 
 
 var reset = d3.select(".chart")
@@ -264,7 +267,7 @@ var stack = d3.layout.stack()
     .y(function(d) { return d.value; });
 
  var stackArea = d3.layout.stack()
-    .offset("zero")
+    .offset("offset")
     .values(function(d) { return d.values; })
     .x(function(d) { return d.date; })
     .y(function(d) { return d.value; });    
@@ -284,7 +287,7 @@ var svg = d3.select(".chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
 
-var graph = d3.csv("genre-count.csv", function(data) {
+var graph = d3.csv("genre-count3.csv", function(data) {
   data.forEach(function(d) {
     d.date = +d.date;
     d.value = ((+d.value)/200)*100;
@@ -303,16 +306,19 @@ var graph = d3.csv("genre-count.csv", function(data) {
       .attr("id", function(d){ return d.key.replace(/[\s\.]/g,'_') } )
       .attr("d", function(d) { 
         return area(d.values); })
-      .style("fill", function(d, i) { 
+      .style("fill", function(d, i) {
+
         if (catA.indexOf(d.key) > -1) {
 
           return orRange(i); 
+          
 
         }
 
         else if (catB.indexOf(d.key) > -1) {
 
           return blRange(i);
+          
 
         }
 
@@ -357,9 +363,10 @@ var graph = d3.csv("genre-count.csv", function(data) {
             filterText.style("visibility", "hidden");
             genreNeat = "";
             oTable.fnDraw();
+            oTable.fnFilter(""); 
 
             tourItem = 0;
-            $("#guidedTour").html("Click next to see some key trends");
+            $("#guidedTour").html("Click next to see key trends, or hover over the chart to explore");
             $("#textTour").fadeOut('fast');
 
   }
@@ -368,6 +375,7 @@ var graph = d3.csv("genre-count.csv", function(data) {
     .attr("opacity", 1)
     .on("click", function(d, i) {
 
+      console.log("pt1");
       genreID = d3.select(this).attr("id");
       genreData = stackArea(layers.filter(function(d) { return d.key == genreID.replace('_',' ') }));
 
@@ -375,14 +383,14 @@ var graph = d3.csv("genre-count.csv", function(data) {
 
       selected.exit()
         .transition()
-          .attr("d","M0,0")
+          .attr("d","M0,0");
 
-
+      console.log("pt2");    
       selected
-        .transition()
         .attr("d", function(d) { 
-        return area(d.values); })   
+        return area(d.values); });   
 
+      console.log("pt3");  
       genreNeat = genreID.replace('_',' ');  
       reset.style("visibility", "visible");
       filterText.style("visibility", "visible");  
@@ -433,6 +441,7 @@ var graph = d3.csv("genre-count.csv", function(data) {
       .attr("stroke-width", "0px");
   })
 
+
   $("#nextItem").on("click", function() {
     guidedTour();
   });
@@ -443,10 +452,16 @@ var graph = d3.csv("genre-count.csv", function(data) {
 
     if (tourItem == 0) {
 
-        $("#textTour").fadeIn().html("Between 1993 and 2006, rock and alternative bands dominated the Triple J Hottest 100. Brisbane’s Powderfinger – who have had 22 records in the hottest 100 in all, more than anyone else – helped make 2000 the most guitar-heavy year of all, when 50% of the records in the chart fell into those genres. Powderfinger occupied the no 1 and 3 slots, while the top 10 was crowded with bands who were either already filling stadiums or on their way to doing so: perennials like U2 and the Red Hot Chili Peppers and younger bands like. Over the first half of the 00s, the 90s axe heroes were replaced by younger, more indie bands; the Vines, Jet and Wolfmother from Australia; and the Killers, the White Stripes, the Strokes and Queens of the Stone Age from the States. But in 2006, the proportion of guitar records in the Hot 100 dropped abruptly, to 35.5%, and has declined swiftly ever since, falling to just 12% in 2011 and 2012.");
-
+        
         $("#guidedTour").html("The decline of the guitar");
 
+        $("#textTour").fadeOut('fast');
+        $("#textTour").promise().done(function(){
+
+          $("#textTour").html("Between 1993 (the first time Hottest 100 entries were limited to a single year)  and 2006, rock and alternative bands dominated the Triple J Hottest 100. Brisbane’s Powderfinger – who have had 22 tracks in the hottest 100 in all, more than anyone else – helped make 2000 the most guitar-heavy year of all, when 50% of the songs in the chart fell into those genres. Powderfinger occupied the No 1 and No 3 slots, while the top 10 was crowded with bands who were either already filling stadiums or on their way to doing so: perennials like U2 and the Red Hot Chili Peppers and younger bands. Over the first half of the ’00s, the ’90s axe heroes were replaced by younger, more indie bands; the Vines, Jet and Wolfmother from Australia; and the Killers, the White Stripes, the Strokes and Queens of the Stone Age from the States. But in 2006, the proportion of rock and alternative tracks in the Hottest 100 dropped abruptly, to 35.5%, and has declined swiftly ever since, falling to just 12% in 2011 and 2012.");
+          $("#textTour").fadeIn('fast');
+
+        });
 
         genreData = stackArea(layers.filter(function(d) { return d.key == "rock" | d.key == "alternative" }));
 
@@ -463,20 +478,28 @@ var graph = d3.csv("genre-count.csv", function(data) {
         return area(d.values); })   
  
       reset.style("visibility", "visible");
-      filterText.style("visibility", "visible");  
+      filterText.style("visibility", "hidden");
 
+      genreNeat = "";
+      oTable.fnDraw();  
+      oTable.fnFilter("rock|alternative",null,true,false);
 
     }
 
     else if (tourItem == 1) {
 
-      $("#textTour").fadeOut().fadeIn().html("Taking electronic music to include hip-hop as well as house and techno – basically, records without guitars – we see a decline from 1993 (18.5%) to 1998 (9.5%), then a rise to 11.5% in 2002; a slump to 6.5% in 2004; followed by a swift upward trajectory to its all-time high of 29% in 2012. This has been mainly driven by the surging popularity of rap since the early 00s, but also an increasing appetite by Triple J listeners for electronic dance music, which from 2006 onwards has grown in popularity as guitar music has declined, initially thanks to the likes of the Presets, Prodigy, Fatboy Slim and the Chemical Brothers but latterly driven by acts like Flume, Pendulum, Calvin Harris and Skrillex.");
-
       $("#guidedTour").html("The ascent of electronic music");
 
+      $("#textTour").fadeOut('fast');
+      $("#textTour").promise().done(function(){
+
+          $("#textTour").html("Taking electronic music to include hip-hop as well as house and techno – basically, records without guitars – we see a decline from 1993 (18%) to 1998 (9.5%), then a rise to 17.5% in 2001; a slump to 4.5% in 2005; followed by a swift upward trajectory to its all-time high of 40% in 2012. This has been driven mainly by the surging popularity of rap since the early ’00s, but also an increasing appetite by Triple J listeners for electronic dance music, which from 2006 has grown in popularity as guitar music has declined, initially thanks to the likes of the Presets, Prodigy, Fatboy Slim and the Chemical Brothers but latterly driven by acts like Flume, Pendulum, Calvin Harris and Skrillex.");
+          $("#textTour").fadeIn('fast');
+
+        });
 
 
-      genreData = stackArea(layers.filter(function(d) { return d.key == "acid house" |d.key == "ambient" |d.key == "big beat" |d.key == "breakbeat" |d.key == "breakcore" |d.key == "cyberpunk" |d.key == "dance" |d.key == "dance pop" |d.key == "deep house" |d.key == "disco" |d.key == "disco house" |d.key == "downtempo" |d.key == "drum and bass" |d.key == "dubstep" |d.key == "edm" |d.key == "electro" |d.key == "electro house" |d.key == "electroclash" |d.key == "electronic" |d.key == "electronica" |d.key == "electropop" |d.key == "eurodance" |d.key == "experimental" |d.key == "french house" |d.key == "house" |d.key == "industrial" |d.key == "minimal" |d.key == "new rave" |d.key == "nu disco" |d.key == "synthpop" |d.key == "techno" |d.key == "trance" |d.key == "bounce" |d.key == "club" |d.key == "dancehall" |d.key == "dub" |d.key == "grime" |d.key == "hip hop" |d.key == "r&b" |d.key == "rap" |d.key == "remix" |d.key == "scratch" |d.key == "soul" |d.key == "spoken word" |d.key == "trip hop"}));
+      genreData = stackArea(layers.filter(function(d) { return d.key == "acid house" |d.key == "ambient" |d.key == "big beat" |d.key == "breakbeat" |d.key == "breakcore" |d.key == "cyberpunk" |d.key == "dance" |d.key == "dance pop" |d.key == "deep house" |d.key == "disco" |d.key == "disco house" |d.key == "downtempo" |d.key == "drum and bass" |d.key == "dubstep" |d.key == "edm" |d.key == "electro" |d.key == "electro house" |d.key == "electroclash" |d.key == "electronic" |d.key == "electronica" |d.key == "electropop" |d.key == "eurodance" |d.key == "experimental" |d.key == "french house" |d.key == "house" |d.key == "industrial" |d.key == "minimal" |d.key == "nu disco" |d.key == "synthpop" |d.key == "techno" |d.key == "trance" |d.key == "bounce" |d.key == "club" |d.key == "dancehall" |d.key == "dub" |d.key == "grime" |d.key == "hip hop" |d.key == "r&b" |d.key == "rap" |d.key == "remix" |d.key == "scratch" | d.key == "spoken word" |d.key == "trip hop"}));
 
       var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
 
@@ -491,18 +514,24 @@ var graph = d3.csv("genre-count.csv", function(data) {
         return area(d.values); })   
  
       reset.style("visibility", "visible");
-      filterText.style("visibility", "visible");  
-
+      filterText.style("visibility", "hidden");
+      genreNeat = "";
+      oTable.fnDraw();    
+      oTable.fnFilter("acid house|ambient|big beat|bounce|breakbeat|breakcore|club|cyberpunk|dance|dance pop|dancehall|deep house|disco|disco house|downtempo|drum and bass|dub|dubstep|edm|electro|electro house|electroclash|electronic|electronica|electropop|eurodance|experimental|french house|grime|hip hop|house|industrial|minimal|nu disco|r&b|rap|remix|scratch|spoken word|synthpop|techno|trance|trip hop",null,true,false);
 
     }
 
     else if (tourItem == 2) {
 
-      $("#textTour").fadeOut();
       $("#guidedTour").html("The rise of hip-hop and rap");
 
-      $("#textTour").html("Before 2000, if would take a massive international hit like 2Pac’s California Love or Warren G’s Regulate to get rap into the Hot 100, or something that crossed over to an indie/alternative audience like Cypress Hill. Since then, however, the amount of hip-hop in the Hottest 100 has exploded, thanks partly to homegrown rappers like Illy (four records in four years), Bliss N Eso (six records in three years) and, overwhelmingly, Hilltop Hoods, who have had 12 records in the chart in less than a decade, making them more popular with Triple J listeners than Jay-Z and Kanye West combined.");
-      $("#textTour").fadeIn('fast');
+      $("#textTour").fadeOut('fast');
+      $("#textTour").promise().done(function(){
+
+          $("#textTour").html("Before 2000, it would take a massive international hit like 2Pac’s California Love or Warren G’s Regulate to get rap into the Hot 100, or something that crossed over to an indie/alternative audience like Cypress Hill. Since then, however, the amount of hip-hop in the Hottest 100 has exploded, thanks partly to homegrown rappers like Illy (four tracks in four years), Bliss N Eso (six tracks in three years) and, overwhelmingly, Hilltop Hoods, who have had 12 tracks in the chart in less than a decade, making them more popular with Triple J listeners than Jay-Z and Kanye West combined.");
+          $("#textTour").fadeIn('fast');
+
+        });
 
 
       genreData = stackArea(layers.filter(function(d) { return d.key == "hip hop" | d.key == "rap" }));
@@ -520,19 +549,25 @@ var graph = d3.csv("genre-count.csv", function(data) {
         return area(d.values); })   
  
       reset.style("visibility", "visible");
-      filterText.style("visibility", "visible");  
+      filterText.style("visibility", "hidden");
+      genreNeat = "";
+      oTable.fnDraw();
+      oTable.fnFilter("hip hop|rap",null,true,false);    
 
 
     }
 
      else if (tourItem == 3) {
 
-      $("#textTour").fadeOut();
       $("#guidedTour").html("Whatever happened to grunge?");
 
-      $("#textTour").html("In the early-to-mid 90s, Pearl Jam, Hole, Stone Temple Pilots and scene godfathers Nirvana made grunge the toast of young Australia – even more so when Silverchair came along and gave the country a grunge band of its own. By the second half of the 90s, grunge declined as British bands like Oasis (no 1 in 1995 with Wonderwall, although with only three records in the chart over the years), the Verve and Blur ascended, superseded in popularity at the turn of the century by the nu-metal brigade (Korn et al). But while to purists Kurt Cobain’s death marked the real end of grunge, in some ways its popularity has endured in the shape of Nirvana drummer Dave Grohl’s band the Foo Fighters. They’ve had 21 records in the Hottest 100 in all (three of them in the top 10), making them second in popularity only to Powderfinger.");
+      $("#textTour").fadeOut('fast');
+      $("#textTour").promise().done(function(){
 
-      $("#textTour").fadeIn('fast');
+          $("#textTour").html("In the early-to-mid ’90s, Pearl Jam, Hole, Stone Temple Pilots and scene godfathers Nirvana made grunge the toast of young Australia – even more so when Silverchair came along and gave the country a grunge band of its own. By the second half of the ’90s, grunge declined as British bands like Oasis (No 1 in 1995 with Wonderwall, although with only three records in the chart over the years), the Verve and Blur ascended, superseded in popularity at the turn of the century by the nu-metal brigade (Korn et al). But while to purists Kurt Cobain’s death marked the real end of grunge, in some ways its popularity has endured in the shape of Nirvana drummer Dave Grohl’s band the Foo Fighters. They’ve had 21 records in the Hottest 100 (three of them in the top 10), making them second in popularity only to Powderfinger.");
+          $("#textTour").fadeIn('fast');
+
+        });
 
 
       genreData = stackArea(layers.filter(function(d) { return d.key == "grunge" }));
@@ -550,7 +585,10 @@ var graph = d3.csv("genre-count.csv", function(data) {
         return area(d.values); })   
  
       reset.style("visibility", "visible");
-      filterText.style("visibility", "visible");  
+      filterText.style("visibility", "hidden");
+      genreNeat = "";
+      oTable.fnDraw();
+      oTable.fnFilter("grunge",null,true,false);     
 
 
     }
@@ -558,12 +596,17 @@ var graph = d3.csv("genre-count.csv", function(data) {
 
     else if (tourItem == 4) {
 
-      $("#textTour").fadeOut();
-      $("#guidedTour").html("The changing face of pop");
-
-      $("#textTour").html("Pop is a broad category, ranging from Kylie to Regina Spector, but its popularity has almost doubled since Triple J started counting down the Hottest 100, from 12% to 22%. Australians seemed to lose the taste for pop in 2003, where it accounted for only 6% of the total, but the following year it was back decisively, with 18% – thanks in part to Franz Ferdinand (whose Take Me Out was that year’s no 1) and the Scissor Sisters. Latterly, Lily Allen (who had four records in the 100 in 2006 alone) and Gotye (no 1 in 2011) have made pop music more than the guilty pleasure it appeared to be for Australians back in 1993, when it was represented by records including Ace of Base’s All that She Wants and East 17’s Deep.");
       
-      $("#textTour").fadeIn('fast');
+      $("#guidedTour").html("The changing face of pop");
+      $("#textTour").fadeOut('fast');
+      $("#textTour").promise().done(function(){
+
+          $("#textTour").html("Pop is a broad category, ranging from Kylie to Regina Spector, but its popularity has increased from 12% to 16% since Triple J started counting down the Hottest 100 by year in 1993. Australians seemed to lose the taste for pop in 2003, where it accounted for only 6% of the total, but the next year it was back decisively, with 18% – thanks in part to Franz Ferdinand (whose Take Me Out was that year’s No 1) and the Scissor Sisters. Latterly, Lily Allen (who had four records in the 100 in 2006 alone) and Gotye (No 1 in 2011) have made pop music more than the guilty pleasure it appeared to be for Australians back in 1993, when it was represented by records including Ace of Base’s All that She Wants and East 17’s Deep.");
+          $("#textTour").fadeIn('fast');
+
+        });
+      
+      
 
 
       genreData = stackArea(layers.filter(function(d) { return d.key == "pop" }));
@@ -581,19 +624,24 @@ var graph = d3.csv("genre-count.csv", function(data) {
         return area(d.values); })   
  
       reset.style("visibility", "visible");
-      filterText.style("visibility", "visible");  
+      filterText.style("visibility", "hidden");
+      genreNeat = "";
+      oTable.fnDraw();
+      oTable.fnFilter("pop",null,true,false);     
 
 
     }
 
      else if (tourItem == 5) {
 
-      $("#textTour").fadeOut();
       $("#guidedTour").html("A growing fondness for folk");
+      $("#textTour").fadeOut('fast');
+      $("#textTour").promise().done(function(){
 
-      $("#textTour").html("Folk now makes up a significant proportion of the Hottest 100, its high watermark to date coming in 2011, when it made up 8% of the overall total. This was thanks to multiple entries by Bon Iver, Boy & Bear, Owl Eyes and Sister Lover Keeper. Mumford and Sons have done a lot to make folk mainstream – their song Little Lion Man took the No 1 slot in 2009. But the most popular folk band with Triple J listeners are the John Butler Trio, who have had an impressive 15 records on the Hottest 100 between 2001 and 2010.");
-      
-      $("#textTour").fadeIn();
+          $("#textTour").html("Folk now makes up a significant proportion of the Hottest 100, its high watermark to date coming in 2011, when it made up 8% of the overall total. This was thanks to multiple entries by Bon Iver, Boy & Bear, Owl Eyes and Sister Lover Keeper. Mumford and Sons have done a lot to make folk mainstream – their song Little Lion Man took the No 1 slot in 2009. But the most popular folk band with Triple J listeners are the John Butler Trio, who have had an impressive 15 records on the Hottest 100 between 2001 and 2010.");
+          $("#textTour").fadeIn('fast');
+
+        });
 
 
       genreData = stackArea(layers.filter(function(d) { return d.key == "folk" }));
@@ -611,8 +659,10 @@ var graph = d3.csv("genre-count.csv", function(data) {
         return area(d.values); })   
  
       reset.style("visibility", "visible");
-      filterText.style("visibility", "visible");  
-
+      filterText.style("visibility", "hidden");
+      genreNeat = "";
+      oTable.fnDraw();    
+      oTable.fnFilter("folk",null,true,false); 
 
     }
 
