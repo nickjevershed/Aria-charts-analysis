@@ -1,151 +1,68 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/local-fonts.css"/>
+  <link rel="stylesheet" href="http://pasteup.guim.co.uk/0.0.5/css/fonts.pasteup.min.css"/>
+  <link rel="stylesheet" type="text/css" href="css/arias.css" /> 
+  <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />
+  <link rel="stylesheet" href="css/jquery.dataTables.css" /> 
   <style>
-
-  body {
-    font: 10px sans-serif;
-    margin:0px;
-  }
-
-  .chart { 
-    background: #fff;
-    width:940px;
-  }
-
-  .remove p {
-    font: 20px helvetica;
-  }
-
-  .axis path, .axis line {
-    fill: none;
-    stroke: #000;
-    stroke-width: 2px;
-    shape-rendering: crispEdges;
-  }
-
-  button {
-    position: absolute;
-    right: 50px;
-    top: 10px;
-  }
-
-  .chart {
-
-    position: relative;
-  }
-
-  .filterText {
-
-      font-size: 20px;
-      font-weight: bold;
-  }
-
-  .reset {
-
-    font-weight: bold;
-    font-size: 12px;
-    cursor: pointer;
-  }
-
-  .infobox {
-
-    font-size: 12px;
-  }
-
-  .genre {
-
-    font-size: 16px;
-  }
-
-
-  .ui-tooltip-content {
-
-    z-index: 60;
-  }
-
-  #tableWrapper {
-
-        width:940px;
-  }
-
-  #nextItem {
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    background: url('img/right.png') no-repeat right center;
-    width:60px;
-    position: absolute;
-    right:50px;
-    top:3px;
-    z-index: 60;
-
-  }
-
-  #guidedTour {
-
-    font-size: 25px;
-    font-family: Georgia, Times, serif;
-    padding-left:50px;
-  }
-
-  #textTour {
-  position: absolute;
-  top:100px;
-  left:50px;
-  width:700px;
-  font-size:14px;
-  display: none;
-  }      
-
-  #hottestWrapper {
-    width:940px;
-    position: relative;
-  }
-
-  .bottomRow {
-
-    margin-top: 20px;
-    font-size: 14px;
-  }
-
-  #percent1 {
-
-    position: absolute;
-    top: 19px;
-    left: 8px;
-    font-size: 14px;
-    z-index: 60;
-
-  }
-
-  #percent2 {
-
-   position: absolute;
-    top:19px;
-    right:9px;
-    font-size: 14px;
-    z-index: 60;
-
-  }
-
 
   </style>
 
-<link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />
-<link rel="stylesheet" href="css/jquery.dataTables.css" />
+
 
 
 </head>
 
 <body>
-<div id="hottestWrapper">
-<div id="chartContainer">
-<div class="chart">
-  <div id="textTour">
-   </div> 
+<div id="interactiveWrapper">
+
+<div class="interactiveText">
+<p>The Australian government’s policy of mandatory detention for asylum seekers has benefited contractors by up to $10bn since mid-2007.</p>
+<p>Guardian Australia has conducted an analysis of contracts in the <a href="https://www.tenders.gov.au/" data-link-name="in body link" class=" u-underline" data-component="in-body-link">AusTender database</a> awarded by the Department of Immigration and containing keywords relating to the mandatory detention system. You can read more about the specific methods below.</p>
+<p>The analysis reveals for the first time the scale of the privatised detention system, with 1,770 contracts awarded to 522 entities.</p>
+<p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
 </div>
+
+
+<div class="topbar"></div>
+<div class="chartTitle">Chart music genres over time</div>
+
+<div id="toggleText"><p>Click to toggle categories:</p></div>
+<div id="streamGraphfilters" class="filter">
+  <span id="traditionalBand">Traditional band</span>
+  <span id="electronic">Electronic</span>
+  <span id="urban">Urban</span>
+  <span id="popMusic">Pop music</span>
+  <span id="other">Other</span>    
+</div> 
+<div id="streamGraph" class="chart">
 </div>
+
+<div class="interactiveText">
+<p>The Australian government’s policy of mandatory detention for asylum seekers has benefited contractors by up to $10bn since mid-2007.</p>
+<p>Guardian Australia has conducted an analysis of contracts in the <a href="https://www.tenders.gov.au/" data-link-name="in body link" class=" u-underline" data-component="in-body-link">AusTender database</a> awarded by the Department of Immigration and containing keywords relating to the mandatory detention system. You can read more about the specific methods below.</p>
+<p>The analysis reveals for the first time the scale of the privatised detention system, with 1,770 contracts awarded to 522 entities.</p>
+<p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
+</div>
+
+<div class="topbar"></div>
+<div class="chartTitle">Chart music duration over time</div>
+
+<div id="durationScatterfilters" class="filter">
+  <span id="traditionalBand">Traditional band</span>
+  <span id="electronic">Electronic</span>
+  <span id="urban">Urban</span>
+  <span id="popMusic">Pop music</span>
+  <span id="other">Other</span>    
+</div> 
+<div id="durationScatter" class="chart">
+</div>
+
+
 
 </div>
 
@@ -163,9 +80,21 @@ var clickTo = "Click to filter";
 $(document).ready(function() {
 
 
-var tourItem = 0;
+var getW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+var getH = getW*0.5;
 
-var datearray = [];
+//Smaller graph for smaller screens
+
+if (getW > 1300) {
+  getW = 1300;
+  getH = getW*0.5;
+}
+
+
+function drawStreamGraph() {
+
+
+  var datearray = [];
 var colorrange = [];
 
 strokecolor = "black";
@@ -178,10 +107,10 @@ var purple = ['rgb(242,240,247)','rgb(218,218,235)','rgb(188,189,220)','rgb(158,
 
 
 var margin = {top: 15, right: 30, bottom: 30, left: 30};
-var width = 940 - margin.left - margin.right;
-var height = 650 - margin.top - margin.bottom;
+var width = getW - margin.left - margin.right;
+var height = getH - margin.top - margin.bottom;
 
-var reset = d3.select(".chart")
+var reset = d3.select("#streamGraph")
     .append("div")
     .attr("class", "reset")
     .style("position", "absolute")
@@ -190,7 +119,7 @@ var reset = d3.select(".chart")
     .style("top", "90px")
     .style("right", "55px");
 
-var filterText = d3.select(".chart")
+var filterText = d3.select("#streamGraph")
     .append("div")
     .attr("class", "filterText")
     .style("position", "absolute")
@@ -260,7 +189,7 @@ var area = d3.svg.area()
     .y0(function(d) { return y(d.y0); })
     .y1(function(d) { return y(d.y0 + d.y); });
 
-var svg = d3.select(".chart").append("svg")
+var svg = d3.select("#streamGraph").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -438,8 +367,124 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
   })
 
 
-  
 });
+
+}
+
+
+function drawDurationScatter() {
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = getW - margin.left - margin.right,
+    height = getH - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickFormat(d3.format("d"));
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var svg = d3.select("#durationScatter").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("data/duration-groups.csv", function(error, data) {
+  data.forEach(function(d) {
+    d.year = +d.year;
+    d.duration = +d.duration;
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.year; })).nice();
+  y.domain(d3.extent(data, function(d) { return d.duration; })).nice();
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text("Sepal Width (cm)");
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Duration (sec)")
+
+  svg.selectAll(".dot")
+      .data(data)
+    .enter().append("circle")
+      .attr("class", "dot")
+      .attr("opacity", "0.8")
+      .attr("r", 3.5)
+      .attr("cx", function(d) { return x(d.year); })
+      .attr("cy", function(d) { return y(d.duration); })
+      .style("fill", function(d) { 
+        if (d['group'] == 'band') {
+          return '#31a354'
+        } 
+        else if (d['group'] == 'urban') {
+          return '#3182bd'
+        } 
+
+        else if (d['group'] == 'electronic') {
+          return '#756bb1'
+        } 
+
+        else if (d['group'] == 'pop') {
+          return '#de2d26'
+        } 
+
+        else if (d['group'] == 'other') {
+          return '#636363'
+        } 
+
+      });
+
+  svg.append("line")
+      .attr("class", "trendline")
+      .attr("x1", function(d) { return x(1988); })
+      .attr("y1", function(d) { return y(263.2); })
+      .attr("x2", function(d) { return x(2014); })
+      .attr("y2", function(d) { return y(220.3); })
+      .attr("stroke", "black")
+      .attr("stroke-width", 1);    
+
+
+});
+
+
+
+
+}
+
+
+drawStreamGraph();
+drawDurationScatter();
+
+
+
 
 });
 

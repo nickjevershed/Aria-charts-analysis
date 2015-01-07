@@ -1,0 +1,35 @@
+
+
+        
+        $("#guidedTour").html("The decline of the guitar");
+
+        $("#textTour").fadeOut('fast');
+        $("#textTour").promise().done(function(){
+
+          $("#textTour").html("Between 1993 (the first time Hottest 100 entries were limited to a single year)  and 2006, rock and alternative bands dominated the Triple J Hottest 100. Brisbane’s Powderfinger – who have had 22 tracks in the hottest 100 in all, more than anyone else – helped make 2000 the most guitar-heavy year of all, when 50% of the songs in the chart fell into those genres. Powderfinger occupied the No 1 and No 3 slots, while the top 10 was crowded with bands who were either already filling stadiums or on their way to doing so: perennials like U2 and the Red Hot Chili Peppers and younger bands. Over the first half of the ’00s, the ’90s axe heroes were replaced by younger, more indie bands; the Vines, Jet and Wolfmother from Australia; and the Killers, the White Stripes, the Strokes and Queens of the Stone Age from the States. But in 2006, the proportion of rock and alternative tracks in the Hottest 100 dropped abruptly, to 35.5%, and has declined swiftly ever since, falling to just 12% in 2011 and 2012.");
+          $("#textTour").fadeIn('fast');
+
+        });
+
+        genreData = stackArea(layers.filter(function(d) { return d.key == "rock" | d.key == "alternative" }));
+
+        var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
+
+      selected.exit()
+        .transition()
+          .attr("d","M0,0")
+
+
+      selected
+        .transition()
+        .attr("d", function(d) { 
+        return area(d.values); })   
+ 
+      reset.style("visibility", "visible");
+      filterText.style("visibility", "hidden");
+
+      genreNeat = "";
+      oTable.fnDraw();  
+      oTable.fnFilter("rock|alternative",null,true,false);
+
+    }

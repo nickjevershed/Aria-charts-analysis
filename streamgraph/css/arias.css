@@ -1,0 +1,114 @@
+body {
+        margin:0px;
+        padding:0px;
+        font-family:'Guardian Egyptian Web', 'Egyptian Display', Georgia, serif
+        font-size:1em;
+
+}
+
+.chartTitle {
+margin: 0 auto;
+margin-bottom: 15px;
+font-size: 21px;
+font-family: 'Guardian Egyptian Web', EgyptianHeadline, Georgia, serif;
+font-weight: 900;
+text-align: left;
+color: #005689;
+}
+
+
+.interactiveText p 
+{
+font-family: 'Guardian Text Egyptian Web','Egyptian Text',Georgia,serif;
+font-size: 1.1rem;
+line-height: 24px;
+max-width: 704px;
+margin-left:auto;
+margin-right:auto;
+}
+
+
+
+.topbar {
+width: 70px;
+height: 4px;
+background-color: #4bc6df;
+margin-bottom: 10px;
+}
+
+ .chart { 
+    background: #fff;
+    font: 10px sans-serif;
+    max-width:1300px;
+    margin-left:auto;
+    margin-right:auto; 
+}
+
+  .remove p {
+    font: 20px helvetica;
+  }
+
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2px;
+    shape-rendering: crispEdges;
+  }
+
+  button {
+    position: absolute;
+    right: 50px;
+    top: 10px;
+  }
+
+  .chart {
+
+    position: relative;
+  }
+
+  .filterText {
+
+      font-size: 20px;
+      font-weight: bold;
+  }
+
+  .reset {
+
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .infobox {
+
+    font-size: 12px;
+  }
+
+  .genre {
+
+    font-size: 16px;
+  }
+
+
+  .ui-tooltip-content {
+
+    z-index: 60;
+  }
+
+#interactiveWrapper {
+    max-width:1300px;
+    margin-left: auto;
+    margin-right:auto;
+    position: relative;
+}
+
+.filter{margin:0 24px 10px 0;font:10px Helvectica,Arial,sans-serif;}
+.filter span{padding:3px 4px;font-size:1.1em;color:#919292;background:#F0F4F5;line-height:20px;display:inline-block;cursor:pointer;border-left:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;border-right:1px solid #CCCCCC;text-decoration:none;}
+.filter span#traditionalBand{background:#31a354;color:#fff;}
+.filter span#urban{background:#3182bd;color:#fff;}
+.filter span#popMusic{background:#de2d26;color:#fff;}
+.filter span#electronic{background:#756bb1;color:#fff;}
+.filter span#other{background:#636363;color:#fff;}
+
+
+
