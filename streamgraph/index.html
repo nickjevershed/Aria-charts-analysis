@@ -1,150 +1,145 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<html>
+  <head>
+  <style>
 
-body {
-  font: 10px sans-serif;
-  margin:0px;
-}
+  body {
+    font: 10px sans-serif;
+    margin:0px;
+  }
 
-.chart { 
-  background: #fff;
-  width:940px;
-}
+  .chart { 
+    background: #fff;
+    width:940px;
+  }
 
-.remove p {
-  font: 20px helvetica;
-}
+  .remove p {
+    font: 20px helvetica;
+  }
 
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  stroke-width: 2px;
-  shape-rendering: crispEdges;
-}
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2px;
+    shape-rendering: crispEdges;
+  }
 
-button {
-  position: absolute;
-  right: 50px;
-  top: 10px;
-}
+  button {
+    position: absolute;
+    right: 50px;
+    top: 10px;
+  }
 
-.chart {
+  .chart {
 
-  position: relative;
-}
+    position: relative;
+  }
 
-.filterText {
+  .filterText {
 
+      font-size: 20px;
+      font-weight: bold;
+  }
+
+  .reset {
+
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .infobox {
+
+    font-size: 12px;
+  }
+
+  .genre {
+
+    font-size: 16px;
+  }
+
+
+  .ui-tooltip-content {
+
+    z-index: 60;
+  }
+
+  #tableWrapper {
+
+        width:940px;
+  }
+
+  #nextItem {
     font-size: 20px;
     font-weight: bold;
-}
+    cursor: pointer;
+    background: url('img/right.png') no-repeat right center;
+    width:60px;
+    position: absolute;
+    right:50px;
+    top:3px;
+    z-index: 60;
 
-.reset {
+  }
 
-  font-weight: bold;
-  font-size: 12px;
-  cursor: pointer;
-}
+  #guidedTour {
 
-.infobox {
+    font-size: 25px;
+    font-family: Georgia, Times, serif;
+    padding-left:50px;
+  }
 
-  font-size: 12px;
-}
-
-.genre {
-
-  font-size: 16px;
-}
-
-
-.ui-tooltip-content {
-
-  z-index: 60;
-}
-
-#tableWrapper {
-
-      width:940px;
-}
-
-#nextItem {
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  background: url('img/right.png') no-repeat right center;
-  width:60px;
+  #textTour {
   position: absolute;
-  right:50px;
-  top:3px;
-  z-index: 60;
+  top:100px;
+  left:50px;
+  width:700px;
+  font-size:14px;
+  display: none;
+  }      
 
-}
+  #hottestWrapper {
+    width:940px;
+    position: relative;
+  }
 
-#guidedTour {
+  .bottomRow {
 
-  font-size: 25px;
-  font-family: Georgia, Times, serif;
-  padding-left:50px;
-}
+    margin-top: 20px;
+    font-size: 14px;
+  }
 
-#textTour {
-position: absolute;
-top:100px;
-left:50px;
-width:700px;
-font-size:14px;
-display: none;
-}      
+  #percent1 {
 
-#hottestWrapper {
-  width:940px;
-  position: relative;
-}
+    position: absolute;
+    top: 19px;
+    left: 8px;
+    font-size: 14px;
+    z-index: 60;
 
-.bottomRow {
+  }
 
-  margin-top: 20px;
-  font-size: 14px;
-}
+  #percent2 {
 
-#percent1 {
+   position: absolute;
+    top:19px;
+    right:9px;
+    font-size: 14px;
+    z-index: 60;
 
-  position: absolute;
-  top: 19px;
-  left: 8px;
-  font-size: 14px;
-  z-index: 60;
-
-}
-
-#percent2 {
-
- position: absolute;
-  top:19px;
-  right:9px;
-  font-size: 14px;
-  z-index: 60;
-
-}
+  }
 
 
-</style>
+  </style>
 
-<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="js/d3.min.js"></script>
 <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />
-<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
-<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="css/jquery.dataTables.css" />
+
+
+</head>
+
 <body>
 <div id="hottestWrapper">
-<div id="percent1">%</div>
-  <div id="percent2">%</div>  
-<div id="tour">
-  <span id="guidedTour">Click next to see key trends, or hover over the chart to explore</span>
-  <div id="nextItem">next</div>
-</div>  
 <div id="chartContainer">
 <div class="chart">
   <div id="textTour">
@@ -152,78 +147,21 @@ display: none;
 </div>
 </div>
 
-<div id="tableWrapper">
-<table id="list" width="100%">
-  <thead>
-    <tr>
-      <th class="Year-cell">Year</th>
-      <th class="Rank-cell">Rank</th>
-      <th class="Artist-cell">Artist</th>
-      <th class="Song-cell">Song</th>
-      <th class="Genre1-cell">Genre1</th>
-      <th class="Genre2-cell">Genre2</th>
-    </tr>
-  </thead>
-  <tbody>
-   
-  </tbody>
- 
-</table>
 </div>
-<div class="bottomRow">
-  <h3>Methods</h3>
-  <p>The artist of every song from every Hottest 100 from 1993 to 2012 was automatically assigned to the two most common genres returned from the <a href="http://echonest.com/" target="_parent">Echo Nest API</a>, the same service used by Spotify and Rdio. We also tried assigning genres on a per-song basis using last.fm's API, but found the user-generated genre tags to be unreliable. Once the list of songs with genres was compiled, duplicate genres (eg. alternative, alternative rock) were merged and genres were grouped by year and then converted to a percentage.</p>  
-  <p>The streamgraph visualisation is based on <a href="http://bl.ocks.org/WillTurman/4631136" target="_parent">Will Turman's D3 code</a>.
 
-</div>  
-</div>
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/d3.min.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+
 <script>
 
 var genreNeat = "";
 
 var clickTo = "Click to filter";
 
- $.fn.dataTableExt.afnFiltering.push(
-      function( oSettings, aData, iDataIndex ) {
-        
-        var genre1 = aData[4];
-        var genre2 = aData[5];
-        if (genreNeat == "") {
-          return true;
-        }
-
-        else if ( genre1 == genreNeat)
-        {
-          return true;
-        }
-        else if ( genre2 == genreNeat)
-        {
-          return true;
-        }
-        return false;
-      }
-      );
-
 
 $(document).ready(function() {
 
-
-
-var oTable = $('#list').dataTable( {
-    "oLanguage": {
-        "sSearch": "Filter all columns:"
-    },
-    "bProcessing": true,
-    "sAjaxSource": 'hottest100.json',
-    "bScrollInfinite": true,
-    "bScrollCollapse": false,
-    "sScrollY": "600px",
-    "iDisplayLength": 100,
-    "aaSorting": [[0,"desc"]]
-
-} );
-
-oTable.fnDraw();
 
 var tourItem = 0;
 
@@ -232,18 +170,16 @@ var colorrange = [];
 
 strokecolor = "black";
 
-var orange = ["#B30000", "#E34A33", "#FC8D59", "#FDBB84", "#FDD49E", "#FEF0D9"];
-var blue = ["#f1eef6","#d0d1e6","#a6bddb","#74a9cf","#2b8cbe","#045a8d"];
-var pink = ["#980043", "#DD1C77", "#DF65B0", "#C994C7", "#D4B9DA", "#F1EEF6"];
+var grey = ['rgb(247,247,247)','rgb(217,217,217)','rgb(189,189,189)','rgb(150,150,150)','rgb(99,99,99)','rgb(37,37,37)'];
+var blue = ['rgb(239,243,255)','rgb(198,219,239)','rgb(158,202,225)','rgb(107,174,214)','rgb(49,130,189)','rgb(8,81,156)'];
+var red = ['rgb(254,229,217)','rgb(252,187,161)','rgb(252,146,114)','rgb(251,106,74)','rgb(239,59,44)','rgb(203,24,29)','rgb(153,0,13)'];
+var green = ['rgb(237,248,233)','rgb(199,233,192)','rgb(161,217,155)','rgb(116,196,118)','rgb(49,163,84)','rgb(0,109,44)'];
+var purple = ['rgb(242,240,247)','rgb(218,218,235)','rgb(188,189,220)','rgb(158,154,200)','rgb(117,107,177)','rgb(84,39,143)']
+
 
 var margin = {top: 15, right: 30, bottom: 30, left: 30};
 var width = 940 - margin.left - margin.right;
 var height = 650 - margin.top - margin.bottom;
-
-var catA = ["80s","90s","acoustic","adult contemporary","afrobeat","afropop","alternative","alternative metal","americana","anti-folk","ballad","big band","black metal","bluegrass","blues","british pop","college rock","comedy","country","cowpunk","dream pop","emo","folk","folk rock","folk-pop","french pop","funk","garage rock","gothic rock","grindcore","grunge","hard rock","hardcore","heavy metal","indie","indie pop","indie rock","industrial metal","industrial rock","instrumental","jazz","lo-fi","lounge","math rock","metal","metalcore","new wave","nu metal","pop","pop punk","pop rock","post-hardcore","post-punk","power pop","progressive metal","progressive rock","psychedelic","psychedelic rock","punk","rap rock","reggae","rock","rock 'n roll","rockabilly","roots","singer-songwriter","ska","soundtrack","southern rock","world","new rave","soul"]
-
-var catB = ["acid house","ambient","big beat","breakbeat","breakcore","cyberpunk","dance","dance pop","deep house","disco","disco house","downtempo","drum and bass","dubstep","edm","electro","electro house","electroclash","electronic","electronica","electropop","eurodance","experimental","french house","house","industrial","minimal","nu disco","synthpop","techno","trance","bounce","club","dancehall","dub","grime","hip hop","r&b","rap","remix","scratch","spoken word","trip hop"]
-
 
 var reset = d3.select(".chart")
     .append("div")
@@ -276,14 +212,21 @@ var y = d3.scale.linear()
 var z = d3.scale.ordinal()
     .range(colorrange);
 
-var orRange = d3.scale.ordinal()
-    .range(orange);
+var greenRange = d3.scale.ordinal()
+    .range(green);
 
-var pkRange = d3.scale.ordinal()
-    .range(pink);
+var blueRange = d3.scale.ordinal()
+    .range(blue);
 
-var blRange = d3.scale.ordinal()
-    .range(blue);             
+var purpleRange = d3.scale.ordinal()
+    .range(purple);             
+
+var redRange = d3.scale.ordinal()
+    .range(red);
+
+var greyRange = d3.scale.ordinal()
+    .range(grey);       
+
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -323,13 +266,17 @@ var svg = d3.select(".chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
 
-var graph = d3.csv("genre-percents.csv", function(data) {
+var graph = d3.csv("genres-percent-groups.csv", function(data) {
   data.forEach(function(d) {
     d.date = +d.date;
-    d.value = ((+d.value)/200)*100;
+    d.value = +d.value;
   });
 
+  console.log(data);
+
   var layers = stack(nest.entries(data));
+
+  console.log(layers);
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
 
@@ -343,19 +290,31 @@ var graph = d3.csv("genre-percents.csv", function(data) {
       .attr("d", function(d) { 
         return area(d.values); })
       .style("fill", function(d, i) {
-
-        if (catA.indexOf(d.key) > -1) {
-
-          return orRange(i); 
-          
-
+        if (d['values'][0]['group'] === 'band' ) {
+          return greenRange(i); 
         }
 
-        else if (catB.indexOf(d.key) > -1) {
+        else if (d['values'][0]['group'] === 'pop' ) {
 
-          return blRange(i);
+          return redRange(i);
           
+        }
+        else if (d['values'][0]['group'] === 'electronic' ) {
 
+          return purpleRange(i);
+          
+        }
+
+         else if (d['values'][0]['group'] === 'urban' ) {
+
+          return blueRange(i);
+          
+        }
+
+         else if (d['values'][0]['group'] === 'other' ) {
+
+          return greyRange(i);
+          
         }
 
       });
@@ -479,243 +438,6 @@ var graph = d3.csv("genre-percents.csv", function(data) {
   })
 
 
-  $("#nextItem").on("click", function() {
-    guidedTour();
-  });
-  
-  //Step through to highlight some of the interesting trends
-
-  function guidedTour() {
-
-    if (tourItem == 0) {
-
-        
-        $("#guidedTour").html("The decline of the guitar");
-
-        $("#textTour").fadeOut('fast');
-        $("#textTour").promise().done(function(){
-
-          $("#textTour").html("Between 1993 (the first time Hottest 100 entries were limited to a single year)  and 2006, rock and alternative bands dominated the Triple J Hottest 100. Brisbane’s Powderfinger – who have had 22 tracks in the hottest 100 in all, more than anyone else – helped make 2000 the most guitar-heavy year of all, when 50% of the songs in the chart fell into those genres. Powderfinger occupied the No 1 and No 3 slots, while the top 10 was crowded with bands who were either already filling stadiums or on their way to doing so: perennials like U2 and the Red Hot Chili Peppers and younger bands. Over the first half of the ’00s, the ’90s axe heroes were replaced by younger, more indie bands; the Vines, Jet and Wolfmother from Australia; and the Killers, the White Stripes, the Strokes and Queens of the Stone Age from the States. But in 2006, the proportion of rock and alternative tracks in the Hottest 100 dropped abruptly, to 35.5%, and has declined swiftly ever since, falling to just 12% in 2011 and 2012.");
-          $("#textTour").fadeIn('fast');
-
-        });
-
-        genreData = stackArea(layers.filter(function(d) { return d.key == "rock" | d.key == "alternative" }));
-
-        var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
-
-      selected.exit()
-        .transition()
-          .attr("d","M0,0")
-
-
-      selected
-        .transition()
-        .attr("d", function(d) { 
-        return area(d.values); })   
- 
-      reset.style("visibility", "visible");
-      filterText.style("visibility", "hidden");
-
-      genreNeat = "";
-      oTable.fnDraw();  
-      oTable.fnFilter("rock|alternative",null,true,false);
-
-    }
-
-    else if (tourItem == 1) {
-
-      $("#guidedTour").html("The ascent of electronic music");
-
-      $("#textTour").fadeOut('fast');
-      $("#textTour").promise().done(function(){
-
-          $("#textTour").html("Taking electronic music to include hip-hop as well as house and techno – basically, records without guitars – we see a decline from 1993 (18%) to 1998 (9.5%), then a rise to 17.5% in 2001; a slump to 4.5% in 2005; followed by a swift upward trajectory to its all-time high of 40% in 2012. This has been driven mainly by the surging popularity of rap since the early ’00s, but also an increasing appetite by Triple J listeners for electronic dance music, which from 2006 has grown in popularity as guitar music has declined, initially thanks to the likes of the Presets, Prodigy, Fatboy Slim and the Chemical Brothers but latterly driven by acts like Flume, Pendulum, Calvin Harris and Skrillex.");
-          $("#textTour").fadeIn('fast');
-
-        });
-
-
-      genreData = stackArea(layers.filter(function(d) { return d.key == "acid house" |d.key == "ambient" |d.key == "big beat" |d.key == "breakbeat" |d.key == "breakcore" |d.key == "cyberpunk" |d.key == "dance" |d.key == "dance pop" |d.key == "deep house" |d.key == "disco" |d.key == "disco house" |d.key == "downtempo" |d.key == "drum and bass" |d.key == "dubstep" |d.key == "edm" |d.key == "electro" |d.key == "electro house" |d.key == "electroclash" |d.key == "electronic" |d.key == "electronica" |d.key == "electropop" |d.key == "eurodance" |d.key == "experimental" |d.key == "french house" |d.key == "house" |d.key == "industrial" |d.key == "minimal" |d.key == "nu disco" |d.key == "synthpop" |d.key == "techno" |d.key == "trance" |d.key == "bounce" |d.key == "club" |d.key == "dancehall" |d.key == "dub" |d.key == "grime" |d.key == "hip hop" |d.key == "r&b" |d.key == "rap" |d.key == "remix" |d.key == "scratch" | d.key == "spoken word" |d.key == "trip hop"}));
-
-      var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
-
-      selected.exit()
-        .transition()
-          .attr("d","M0,0")
-
-
-      selected
-        .transition()
-        .attr("d", function(d) { 
-        return area(d.values); })   
- 
-      reset.style("visibility", "visible");
-      filterText.style("visibility", "hidden");
-      genreNeat = "";
-      oTable.fnDraw();    
-      oTable.fnFilter("acid house|ambient|big beat|bounce|breakbeat|breakcore|club|cyberpunk|dance|dance pop|dancehall|deep house|disco|disco house|downtempo|drum and bass|dub|dubstep|edm|electro|electro house|electroclash|electronic|electronica|electropop|eurodance|experimental|french house|grime|hip hop|house|industrial|minimal|nu disco|r&b|rap|remix|scratch|spoken word|synthpop|techno|trance|trip hop",null,true,false);
-
-    }
-
-    else if (tourItem == 2) {
-
-      $("#guidedTour").html("The rise of hip-hop and rap");
-
-      $("#textTour").fadeOut('fast');
-      $("#textTour").promise().done(function(){
-
-          $("#textTour").html("Before 2000, it would take a massive international hit like 2Pac’s California Love or Warren G’s Regulate to get rap into the Hot 100, or something that crossed over to an indie/alternative audience like Cypress Hill. Since then, however, the amount of hip-hop in the Hottest 100 has exploded, thanks partly to homegrown rappers like Illy (four tracks in four years), Bliss N Eso (six tracks in three years) and, overwhelmingly, Hilltop Hoods, who have had 12 tracks in the chart in less than a decade, making them more popular with Triple J listeners than Jay-Z and Kanye West combined.");
-          $("#textTour").fadeIn('fast');
-
-        });
-
-
-      genreData = stackArea(layers.filter(function(d) { return d.key == "hip hop" | d.key == "rap" }));
-
-      var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
-
-      selected.exit()
-        .transition()
-          .attr("d","M0,0")
-
-
-      selected
-        .transition()
-        .attr("d", function(d) { 
-        return area(d.values); })   
- 
-      reset.style("visibility", "visible");
-      filterText.style("visibility", "hidden");
-      genreNeat = "";
-      oTable.fnDraw();
-      oTable.fnFilter("hip hop|rap",null,true,false);    
-
-
-    }
-
-     else if (tourItem == 3) {
-
-      $("#guidedTour").html("Whatever happened to grunge?");
-
-      $("#textTour").fadeOut('fast');
-      $("#textTour").promise().done(function(){
-
-          $("#textTour").html("In the early-to-mid ’90s, Pearl Jam, Hole, Stone Temple Pilots and scene godfathers Nirvana made grunge the toast of young Australia – even more so when Silverchair came along and gave the country a grunge band of its own. By the second half of the ’90s, grunge declined as British bands like Oasis (No 1 in 1995 with Wonderwall, although with only three records in the chart over the years), the Verve and Blur ascended, superseded in popularity at the turn of the century by the nu-metal brigade (Korn et al). But while to purists Kurt Cobain’s death marked the real end of grunge, in some ways its popularity has endured in the shape of Nirvana drummer Dave Grohl’s band the Foo Fighters. They’ve had 21 records in the Hottest 100 (three of them in the top 10), making them second in popularity only to Powderfinger.");
-          $("#textTour").fadeIn('fast');
-
-        });
-
-
-      genreData = stackArea(layers.filter(function(d) { return d.key == "grunge" }));
-
-      var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
-
-      selected.exit()
-        .transition()
-          .attr("d","M0,0")
-
-
-      selected
-        .transition()
-        .attr("d", function(d) { 
-        return area(d.values); })   
- 
-      reset.style("visibility", "visible");
-      filterText.style("visibility", "hidden");
-      genreNeat = "";
-      oTable.fnDraw();
-      oTable.fnFilter("grunge",null,true,false);     
-
-
-    }
-
-
-    else if (tourItem == 4) {
-
-      
-      $("#guidedTour").html("The changing face of pop");
-      $("#textTour").fadeOut('fast');
-      $("#textTour").promise().done(function(){
-
-          $("#textTour").html("Pop is a broad category, ranging from Kylie to Regina Spektor, but its popularity has increased from 12% to 16% since Triple J started counting down the Hottest 100 by year in 1993. Australians seemed to lose the taste for pop in 2003, where it accounted for only 6% of the total, but the next year it was back decisively, with 18% – thanks in part to Franz Ferdinand (whose Take Me Out was that year’s No 1) and the Scissor Sisters. Latterly, Lily Allen (who had four records in the 100 in 2006 alone) and Gotye (No 1 in 2011) have made pop music more than the guilty pleasure it appeared to be for Australians back in 1993, when it was represented by records including Ace of Base’s All that She Wants and East 17’s Deep.");
-          $("#textTour").fadeIn('fast');
-
-        });
-      
-      
-
-
-      genreData = stackArea(layers.filter(function(d) { return d.key == "pop" }));
-
-      var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
-
-      selected.exit()
-        .transition()
-          .attr("d","M0,0")
-
-
-      selected
-        .transition()
-        .attr("d", function(d) { 
-        return area(d.values); })   
- 
-      reset.style("visibility", "visible");
-      filterText.style("visibility", "hidden");
-      genreNeat = "";
-      oTable.fnDraw();
-      oTable.fnFilter("pop",null,true,false);     
-
-
-    }
-
-     else if (tourItem == 5) {
-
-      $("#guidedTour").html("A growing fondness for folk");
-      $("#textTour").fadeOut('fast');
-      $("#textTour").promise().done(function(){
-
-          $("#textTour").html("Folk now makes up a significant proportion of the Hottest 100, its high watermark to date coming in 2011, when it made up 8% of the overall total. This was thanks to multiple entries by Bon Iver, Boy & Bear, Owl Eyes and Sister Lover Keeper. Mumford and Sons have done a lot to make folk mainstream – their song Little Lion Man took the No 1 slot in 2009. But the most popular folk band with Triple J listeners are the John Butler Trio, who have had an impressive 15 records on the Hottest 100 between 2001 and 2010.");
-          $("#textTour").fadeIn('fast');
-
-        });
-
-
-      genreData = stackArea(layers.filter(function(d) { return d.key == "folk" }));
-
-      var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
-
-      selected.exit()
-        .transition()
-          .attr("d","M0,0")
-
-
-      selected
-        .transition()
-        .attr("d", function(d) { 
-        return area(d.values); })   
- 
-      reset.style("visibility", "visible");
-      filterText.style("visibility", "hidden");
-      genreNeat = "";
-      oTable.fnDraw();    
-      oTable.fnFilter("folk",null,true,false); 
-
-    }
-
-
-    if (tourItem <= 5) {
-      tourItem++;
-    }
-
-    else {
-
-      resetChart();
-      
-    }
-
-  };  
-
   
 });
 
@@ -723,3 +445,4 @@ var graph = d3.csv("genre-percents.csv", function(data) {
 
 
 </script>
+</body>
