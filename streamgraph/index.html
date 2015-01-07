@@ -323,7 +323,7 @@ var svg = d3.select(".chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
 
-var graph = d3.csv("genre-count3.csv", function(data) {
+var graph = d3.csv("genre-percents.csv", function(data) {
   data.forEach(function(d) {
     d.date = +d.date;
     d.value = ((+d.value)/200)*100;
