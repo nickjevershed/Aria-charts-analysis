@@ -62,11 +62,22 @@
 <div id="durationScatter" class="chart">
 </div>
 
+<div class="interactiveText">
+<p>The Australian government’s policy of mandatory detention for asylum seekers has benefited contractors by up to $10bn since mid-2007.</p>
+<p>Guardian Australia has conducted an analysis of contracts in the <a href="https://www.tenders.gov.au/" data-link-name="in body link" class=" u-underline" data-component="in-body-link">AusTender database</a> awarded by the Department of Immigration and containing keywords relating to the mandatory detention system. You can read more about the specific methods below.</p>
+<p>The analysis reveals for the first time the scale of the privatised detention system, with 1,770 contracts awarded to 522 entities.</p>
+<p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
+</div>
+
+
+<div id="labelColumn" class="chart">
+
+</div>  
 
 
 </div>
 
-<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
 
@@ -94,7 +105,7 @@ if (getW > 1300) {
 function drawStreamGraph() {
 
 
-  var datearray = [];
+var datearray = [];
 var colorrange = [];
 
 strokecolor = "black";
@@ -403,7 +414,6 @@ var svg = d3.select("#durationScatter").append("svg")
 
 d3.csv("data/duration-groups.csv", function(error, data) {
   data.forEach(function(d) {
-    d.year = +d.year;
     d.duration = +d.duration;
   });
 
@@ -474,6 +484,128 @@ d3.csv("data/duration-groups.csv", function(error, data) {
 
 });
 
+}
+
+function drawlabelColumn() {
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.ordinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(d3.format(".2s"));
+
+var svg = d3.select("#labelColumn").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("data/label-percent.csv", function(error, data) {
+
+var headers = ["Major","Independent","Public broadcaster","Unknown"];
+
+console.log(data);
+
+var layers = d3.layout.stack()(headers.map(function(categories) {
+    return data.map(function(d) {
+      return {
+        category:categories,
+        x: d.year, 
+        y: +d[categories]};
+    });
+}));
+
+console.log(layers);
+
+
+var yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); });
+var yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
+
+var xScale = d3.scale.ordinal()
+    .domain(layers[0].map(function(d) { return d.x; }))
+    .rangeRoundBands([25, width], .08);
+
+var y = d3.scale.linear()
+    .domain([0, yStackMax])
+    .range([height, 0]);
+
+var color = d3.scale.ordinal()
+    .domain(headers)
+    .range(['rgb(8,81,156)','rgb(49,130,189)','rgb(107,174,214)','rgb(189,215,231)']);
+      
+    var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .tickSize(0)
+        .tickPadding(6)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .tickFormat(d3.format(".2s"));
+
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text").style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                  return "rotate(-45)" 
+                });
+    
+    svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(20,0)")
+        .call(yAxis)
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr({"x": -150, "y": -70})
+        .attr("dy", ".75em")
+        .style("text-anchor", "end")
+        .text("# of campaigns");
+
+    var layer = svg.selectAll(".layer")
+        .data(layers)
+        .enter().append("g")
+        .attr("class", "layer");
+
+    var rect = layer.selectAll("rect")
+        .data(function(d) {
+
+          console.log(d);
+          return d; })
+        .enter().append("rect")
+        .attr("x", function(d) { return xScale(d.x); })
+        .attr("width", xScale.rangeBand())
+        .attr("y", function(d) { return y(d.y0 + d.y); })
+        .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
+        .style("fill", function(d) { return color(d.category) });
+
+
+
+
+
+
+});
 
 
 
@@ -482,6 +614,7 @@ d3.csv("data/duration-groups.csv", function(error, data) {
 
 drawStreamGraph();
 drawDurationScatter();
+drawlabelColumn();
 
 
 
