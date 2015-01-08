@@ -28,7 +28,6 @@ margin-right:auto;
 }
 
 
-
 .topbar {
 width: 70px;
 height: 4px;
@@ -95,6 +94,24 @@ margin-bottom: 10px;
     z-index: 60;
   }
 
+  .btn {
+  display: inline-block;
+  border-radius: 16px;
+  text-align: center;
+  padding: 5px 10px;
+  line-height:1em; 
+  font-family: "Guardian Agate Sans", Arial, sans-serif;
+  overflow:hidden;
+  color: #FFFFFF;
+  background-color: #bdbdbd;
+  cursor:pointer;
+
+  }
+
+.btn:hover {
+background-color: #bdbdbd !important;
+}
+
 #interactiveWrapper {
     max-width:1300px;
     margin-left: auto;
@@ -102,13 +119,12 @@ margin-bottom: 10px;
     position: relative;
 }
 
-.filter{margin:0 24px 10px 0;font:10px Helvectica,Arial,sans-serif;}
-.filter span{padding:3px 4px;font-size:1.1em;color:#919292;background:#F0F4F5;line-height:20px;display:inline-block;cursor:pointer;border-left:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;border-right:1px solid #CCCCCC;text-decoration:none;}
-.filter span#traditionalBand{background:#31a354;color:#fff;}
-.filter span#urban{background:#3182bd;color:#fff;}
-.filter span#popMusic{background:#de2d26;color:#fff;}
-.filter span#electronic{background:#756bb1;color:#fff;}
-.filter span#other{background:#636363;color:#fff;}
+
+.btn.traditionalBand{background:#31a354;color:#fff;}
+.btn.urban{background:#3182bd;color:#fff;}
+.btn.popMusic{background:#de2d26;color:#fff;}
+.btn.electronic{background:#756bb1;color:#fff;}
+.btn.other{background:#636363;color:#fff;}
 
 
 
