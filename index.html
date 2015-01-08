@@ -33,11 +33,11 @@
 
 <div id="toggleText"><p>Click to toggle categories:</p></div>
 <div id="streamGraphfilters" class="filter">
-  <span id="traditionalBand">Traditional band</span>
-  <span id="electronic">Electronic</span>
-  <span id="urban">Urban</span>
-  <span id="popMusic">Pop music</span>
-  <span id="other">Other</span>    
+  <span data-category="band" class="btn traditionalBand">Traditional band</span>
+  <span data-category="electronic" class="btn electronic">Electronic</span>
+  <span data-category="urban" class="btn urban">Urban</span>
+  <span data-category="pop" class="btn popMusic">Pop music</span>
+  <span data-category="other" class="btn other">Other</span>    
 </div> 
 <div id="streamGraph" class="chart">
 </div>
@@ -53,11 +53,11 @@
 <div class="chartTitle">Chart music duration over time</div>
 
 <div id="durationScatterfilters" class="filter">
-  <span id="traditionalBand">Traditional band</span>
-  <span id="electronic">Electronic</span>
-  <span id="urban">Urban</span>
-  <span id="popMusic">Pop music</span>
-  <span id="other">Other</span>    
+  <span data-category="band" class="btn traditionalBand">Traditional band</span>
+  <span data-category="electronic" class="btn electronic">Electronic</span>
+  <span data-category="urban" class="btn urban">Urban</span>
+  <span data-category="pop" class="btn popMusic">Pop music</span>
+  <span data-category="other" class="btn other">Other</span>   
 </div> 
 <div id="durationScatter" class="chart">
 </div>
@@ -70,7 +70,24 @@
 </div>
 
 
+<div class="topbar"></div>
+<div class="chartTitle">Proportion of major labels v independent over time</div>
+
 <div id="labelColumn" class="chart">
+
+</div>  
+
+<div class="interactiveText">
+<p>The Australian government’s policy of mandatory detention for asylum seekers has benefited contractors by up to $10bn since mid-2007.</p>
+<p>Guardian Australia has conducted an analysis of contracts in the <a href="https://www.tenders.gov.au/" data-link-name="in body link" class=" u-underline" data-component="in-body-link">AusTender database</a> awarded by the Department of Immigration and containing keywords relating to the mandatory detention system. You can read more about the specific methods below.</p>
+<p>The analysis reveals for the first time the scale of the privatised detention system, with 1,770 contracts awarded to 522 entities.</p>
+<p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
+</div>
+
+
+<div class="topbar"></div>
+<div class="chartTitle">Country of origin of artists in charts</div>
+<div id="countryColumn" class="chart">
 
 </div>  
 
@@ -224,7 +241,7 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
   svg.selectAll(".layer")
       .data(layers, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
     .enter().append("path")
-      .attr("class", "layer")
+      .attr("class", function(d) {return "layer " + d['values'][0]['group'].replace(/[\s\.]/g,'_')})
       .attr("title", function(d) {return d.key})
       .attr("id", function(d){ return d.key.replace(/[\s\.]/g,'_') } )
       .attr("d", function(d) { 
@@ -289,6 +306,12 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
 
     var selected = svg.selectAll(".layer").data(stack(layers), function(d){ return d.key.replace(/[\s\.]/g,'_') } );
 
+    y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
+
+    d3.selectAll(".y")
+                  .transition()
+                  .call(yAxis);
+
             selected
               .transition()
               .attr("d", function(d) { 
@@ -297,8 +320,6 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
             reset.style("visibility", "hidden");
             filterText.style("visibility", "hidden");
             genreNeat = "";
-            oTable.fnDraw();
-            oTable.fnFilter(""); 
 
             tourItem = 0;
             $("#guidedTour").html("Click next to see key trends, or hover over the chart to explore");
@@ -307,11 +328,57 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
 
   }
 
+
+  d3.selectAll("#streamGraphfilters .btn").on("click", filterCat);
+
+  function filterCat() {
+
+                resetChart();
+
+                var currElement = d3.select(this)
+                var catID = currElement.attr("data-category");
+                console.log(catID);
+
+                var currCircles = d3.selectAll(".circle."+catID);
+
+                filterData = data.filter(function(d) { return d['group'] == catID })
+
+                var filterCatYear = d3.nest()
+                    .key(function(d) { return d.date; })
+                    .rollup(function(leaves) { return {"total": d3.sum(leaves, function(d) {return (d['value']);})} })
+                    .entries(filterData);
+
+                console.log("Filter cat year: ", filterCatYear);
+
+                y.domain([0, d3.max(filterCatYear, function(d) { return d['values']['total']; })])
+
+                d3.selectAll(".y")
+                  .transition()
+                  .call(yAxis);
+ 
+                console.log("filterData", filterData);
+
+                genreData = stackArea(layers.filter(function(d) { return d['values'][0]['group'] == catID }));
+
+                var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
+
+                selected.exit()
+                  .transition()
+                    .attr("d","M0,0")
+
+
+                selected
+                  .transition()
+                  .attr("d", function(d) { 
+                  return area(d.values); })   
+
+              };    
+
+
   svg.selectAll(".layer")
     .attr("opacity", 1)
     .on("click", function(d, i) {
 
-      console.log("pt1");
       genreID = d3.select(this).attr("id");
       genreData = stackArea(layers.filter(function(d) { return d.key == genreID.replace('_',' ') }));
 
@@ -321,17 +388,14 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
         .transition()
           .attr("d","M0,0");
 
-      console.log("pt2");    
       selected
         .attr("d", function(d) { 
         return area(d.values); });   
 
-      console.log("pt3");  
       genreNeat = genreID.replace('_',' ');  
       reset.style("visibility", "visible");
       filterText.style("visibility", "visible");  
       filterText.html( "<p>Showing: " + genreID.replace('_',' ') + "</p>" );
-      oTable.fnDraw();
       clickTo = "";
 
 
@@ -516,7 +580,7 @@ var svg = d3.select("#labelColumn").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("data/label-percent.csv", function(error, data) {
+d3.csv("data/label-percents.csv", function(error, data) {
 
 var headers = ["Major","Independent","Public broadcaster","Unknown"];
 
@@ -611,11 +675,138 @@ var color = d3.scale.ordinal()
 
 }
 
+function drawCountryColumn() {
+
+
+  var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.ordinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(d3.format(".2s"));
+
+var svg = d3.select("#countryColumn").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("data/country-cat-percents.csv", function(error, data) {
+
+var headers = ["US","Australia","UK","Other"];
+
+console.log(data);
+
+var layers = d3.layout.stack()(headers.map(function(categories) {
+    return data.map(function(d) {
+      return {
+        category:categories,
+        x: d.year, 
+        y: +d[categories]};
+    });
+}));
+
+console.log(layers);
+
+
+var yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); });
+var yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
+
+var xScale = d3.scale.ordinal()
+    .domain(layers[0].map(function(d) { return d.x; }))
+    .rangeRoundBands([25, width], .08);
+
+var y = d3.scale.linear()
+    .domain([0, yStackMax])
+    .range([height, 0]);
+
+var color = d3.scale.ordinal()
+    .domain(headers)
+    .range(['rgb(8,81,156)','rgb(49,130,189)','rgb(107,174,214)','rgb(189,215,231)']);
+      
+    var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .tickSize(0)
+        .tickPadding(6)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .tickFormat(d3.format(".2s"));
+
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text").style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                  return "rotate(-45)" 
+                });
+    
+    svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(20,0)")
+        .call(yAxis)
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr({"x": -150, "y": -70})
+        .attr("dy", ".75em")
+        .style("text-anchor", "end")
+        .text("# of campaigns");
+
+    var layer = svg.selectAll(".layer")
+        .data(layers)
+        .enter().append("g")
+        .attr("class", "layer");
+
+    var rect = layer.selectAll("rect")
+        .data(function(d) {
+
+          console.log(d);
+          return d; })
+        .enter().append("rect")
+        .attr("x", function(d) { return xScale(d.x); })
+        .attr("width", xScale.rangeBand())
+        .attr("y", function(d) { return y(d.y0 + d.y); })
+        .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
+        .style("fill", function(d) { return color(d.category) });
+
+
+
+
+
+
+});
+
+
+
+
+}
+
 
 drawStreamGraph();
 drawDurationScatter();
 drawlabelColumn();
-
+drawCountryColumn();
 
 
 
