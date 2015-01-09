@@ -58,9 +58,9 @@
 
   <div class="topbar"></div>
   <div class="chartTitle">Chart music duration over time</div>
-  <div class="row">
-      <span id="toggleText">Click to toggle groups of genres</span>
-    </div>
+  <div class="row keyText">
+   <p>Click to toggle groups of genres</p>
+  </div>
   <span id="durationScatterfilters" class="filter">
     <span data-category="band" class="btn traditionalBand">Traditional band</span>
     <span data-category="electronic" class="btn electronic">Electronic</span>
@@ -79,12 +79,18 @@
 <p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
 </div>
 
+<div id="labelGraphWrapper">
+  <div class="topbar"></div>
+  <div class="chartTitle">Proportion of major labels v independent over time</div>
+  <div class="row keyText">
+    <span class="keySquare blue1"></span><span>Major label</span>
+    <span class="keySquare blue2"></span><span>Independent label</span>
+    <span class="keySquare blue3"></span><span>Unknown (probably independent)</span>
+    <span class="keySquare blue4"></span><span>Public broadcaster</span>
+  </div>  
+  <div id="labelColumn" class="chart">
 
-<div class="topbar"></div>
-<div class="chartTitle">Proportion of major labels v independent over time</div>
-
-<div id="labelColumn" class="chart">
-
+  </div>
 </div>  
 
 <div class="interactiveText">
@@ -94,13 +100,22 @@
 <p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
 </div>
 
+<div id="countryGraphWrapper">
+  <div class="topbar"></div>
+  <div class="chartTitle">Country of origin of artists in charts</div>
 
-<div class="topbar"></div>
-<div class="chartTitle">Country of origin of artists in charts</div>
-<div id="countryColumn" class="chart">
+  <div class="row keyText">
+    <span class="keySquare blue1"></span><span>United States</span>
+    <span class="keySquare blue2"></span><span>Australia</span>
+    <span class="keySquare blue3"></span><span>United Kingdom</span>
+    <span class="keySquare blue4"></span><span>Other</span>
+  </div>  
 
-</div>  
 
+  <div id="countryColumn" class="chart">
+
+  </div>  
+</div>
 
 </div>
 
@@ -215,17 +230,14 @@ var svg = d3.select("#streamGraph").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
 
-var graph = d3.csv("genres-percent-groups.csv", function(data) {
+var graph = d3.csv("data/genres-percent-groups.csv", function(data) {
   data.forEach(function(d) {
     d.date = +d.date;
     d.value = +d.value;
   });
 
-  console.log(data);
-
   var layers = stack(nest.entries(data));
 
-  console.log("layers: ", layers);
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
 
@@ -309,11 +321,23 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
   svg.append("g")
       .attr("class", "y axis right")
       .attr("transform", "translate(" + width + ", 0)")
-      .call(yAxis.orient("right"));
+      .call(yAxis.orient("right"))
+      .append("text")
+      .attr("class", "label")
+      .attr("dy", "2em")
+      .attr("dx", "1.5em")
+      .style("text-anchor", "end")
+      .text("%");;
 
   svg.append("g")
       .attr("class", "y axis left")
-      .call(yAxis.orient("left"));
+      .call(yAxis.orient("left"))
+      .append("text")
+      .attr("class", "label")
+      .attr("dy", "2em")
+      .attr("dx", "-0.5em")
+      .style("text-anchor", "end")
+      .text("%");
 
 
   d3.select(".reset")
@@ -364,7 +388,6 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
 
                 var currElement = d3.select(this)
                 var catID = currElement.attr("data-category");
-                console.log(catID);
 
                 filterData = data.filter(function(d) { return d['group'] == catID })
 
@@ -372,8 +395,6 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
                     .key(function(d) { return d.date; })
                     .rollup(function(leaves) { return {"total": d3.sum(leaves, function(d) {return (d['value']);})} })
                     .entries(filterData);
-
-                console.log("Filter cat year: ", filterCatYear);
 
                 y.domain([0, d3.max(filterCatYear, function(d) { return d['values']['total']; })])
 
@@ -385,7 +406,6 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
                     .transition()
                     .call(yAxis.orient("right"));  
  
-                console.log("filterData", filterData);
 
                 genreData = stackArea(layers.filter(function(d) { return d['values'][0]['group'] == catID }));
 
@@ -456,7 +476,7 @@ var graph = d3.csv("genres-percent-groups.csv", function(data) {
       .classed("hover", true)
       .attr("stroke", strokecolor)
       .attr("stroke-width", "0.5px"); 
-      $(".infobox").html( "<span class='genre'>Genre: " + d.key + "</span><br>Proportion: " + pro + "%<br>Year: " + (invertedx | 0) + "<br>" + clickTo );
+      $(".infobox").html( "<span class='infoboxHeader'>Genre: " + d.key + "</span><br>Proportion: " + pro + "%<br>Year: " + (invertedx | 0) + "<br>" + clickTo );
 
      
 
@@ -511,6 +531,8 @@ d3.csv("data/duration-groups.csv", function(error, data) {
     d.duration = +d.duration;
   });
 
+  console.log(data);
+
   x.domain(d3.extent(data, function(d) { return d.year; })).nice();
   y.domain(d3.extent(data, function(d) { return d.duration; })).nice();
 
@@ -518,13 +540,7 @@ d3.csv("data/duration-groups.csv", function(error, data) {
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis)
-    .append("text")
-      .attr("class", "label")
-      .attr("x", width)
-      .attr("y", -6)
-      .style("text-anchor", "end")
-      .text("Sepal Width (cm)");
-
+  
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
@@ -542,6 +558,7 @@ d3.csv("data/duration-groups.csv", function(error, data) {
       .attr("class", function(d) { return "dot " + d['group'] })
       .attr("opacity", "0.8")
       .attr("r", 3.5)
+      .attr("title", function(d) {return d['title']})
       .attr("cx", function(d) { return x(d.year); })
       .attr("cy", function(d) { return y(d.duration); })
       .style("fill", function(d) { 
@@ -576,6 +593,15 @@ d3.csv("data/duration-groups.csv", function(error, data) {
       .attr("stroke-width", 1);    
 
 
+ $("#durationGraphWrapper .dot").tooltip({
+                track: true,  
+                  content: function() {
+                var elementData = d3.select(this)[0][0]['__data__'];
+                    return "<div class='infobox'><span class='infoboxHeader'>" + elementData['title'] + " - " + elementData['artist'] + "</span><br>Duration: " + elementData['duration'] + " seconds</div>";
+                  }
+                });     
+
+
  d3.selectAll("#durationGraphWrapper .btn").on("click", filterCat);
 
 function filterCat() {
@@ -585,8 +611,6 @@ function filterCat() {
                 var currElement = d3.select(this)
 
                 var catID = currElement.attr("data-category");
-
-                console.log(catID);
 
                 var currCircles = d3.selectAll("#durationGraphWrapper .dot."+catID);
 
@@ -621,8 +645,8 @@ function filterCat() {
 function drawlabelColumn() {
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = getW - margin.left - margin.right,
+    height = getH - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
@@ -650,9 +674,7 @@ var svg = d3.select("#labelColumn").append("svg")
 
 d3.csv("data/label-percents.csv", function(error, data) {
 
-var headers = ["Major","Independent","Public broadcaster","Unknown"];
-
-console.log(data);
+var headers = ["Major","Independent","Unknown","Public broadcaster"];
 
 var layers = d3.layout.stack()(headers.map(function(categories) {
     return data.map(function(d) {
@@ -662,9 +684,6 @@ var layers = d3.layout.stack()(headers.map(function(categories) {
         y: +d[categories]};
     });
 }));
-
-console.log(layers);
-
 
 var yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); });
 var yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
@@ -709,11 +728,11 @@ var color = d3.scale.ordinal()
         .attr("transform", "translate(20,0)")
         .call(yAxis)
       .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr({"x": -150, "y": -70})
-        .attr("dy", ".75em")
-        .style("text-anchor", "end")
-        .text("# of campaigns");
+      .attr("class", "label")
+      .attr("dy", "2em")
+      .attr("dx", "-0.5em")
+      .style("text-anchor", "end")
+      .text("%");
 
     var layer = svg.selectAll(".layer")
         .data(layers)
@@ -722,18 +741,25 @@ var color = d3.scale.ordinal()
 
     var rect = layer.selectAll("rect")
         .data(function(d) {
-
           console.log(d);
           return d; })
         .enter().append("rect")
         .attr("x", function(d) { return xScale(d.x); })
         .attr("width", xScale.rangeBand())
         .attr("y", function(d) { return y(d.y0 + d.y); })
+        .attr("class", function(d) { return d['category'] + " columnSection" })
+        .attr("title", function(d) { return d['category'] })
         .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
         .style("fill", function(d) { return color(d.category) });
 
 
-
+ $("#labelGraphWrapper .columnSection").tooltip({
+        track: true,  
+          content: function() {
+        var elementData = d3.select(this)[0][0]['__data__'];
+            return "<div class='infobox'><span class='infoboxHeader'>" + elementData['category'] + "</span><br>Proportion: " + elementData['y'].toFixed(2) + "%</div>";
+          }
+        });     
 
 
 
@@ -747,8 +773,8 @@ function drawCountryColumn() {
 
 
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = getW - margin.left - margin.right,
+    height = getH - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
@@ -778,8 +804,6 @@ d3.csv("data/country-cat-percents.csv", function(error, data) {
 
 var headers = ["US","Australia","UK","Other"];
 
-console.log(data);
-
 var layers = d3.layout.stack()(headers.map(function(categories) {
     return data.map(function(d) {
       return {
@@ -788,9 +812,6 @@ var layers = d3.layout.stack()(headers.map(function(categories) {
         y: +d[categories]};
     });
 }));
-
-console.log(layers);
-
 
 var yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); });
 var yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
@@ -834,12 +855,12 @@ var color = d3.scale.ordinal()
         .attr("class", "y axis")
         .attr("transform", "translate(20,0)")
         .call(yAxis)
-      .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr({"x": -150, "y": -70})
-        .attr("dy", ".75em")
-        .style("text-anchor", "end")
-        .text("# of campaigns");
+        .append("text")
+      .attr("class", "label")
+      .attr("dy", "2em")
+      .attr("dx", "-0.5em")
+      .style("text-anchor", "end")
+      .text("%");
 
     var layer = svg.selectAll(".layer")
         .data(layers)
@@ -848,19 +869,24 @@ var color = d3.scale.ordinal()
 
     var rect = layer.selectAll("rect")
         .data(function(d) {
-
-          console.log(d);
           return d; })
         .enter().append("rect")
         .attr("x", function(d) { return xScale(d.x); })
+        .attr("class", function(d) { return d['category'] + " columnSection" })
+        .attr("title", function(d) { return d['category'] })
         .attr("width", xScale.rangeBand())
         .attr("y", function(d) { return y(d.y0 + d.y); })
         .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
         .style("fill", function(d) { return color(d.category) });
 
 
-
-
+     $("#countryGraphWrapper .columnSection").tooltip({
+        track: true,  
+          content: function() {
+        var elementData = d3.select(this)[0][0]['__data__'];
+            return "<div class='infobox'><span class='infoboxHeader'>" + elementData['category'] + "</span><br>Proportion: " + elementData['y'].toFixed(2) + "%</div>";
+          }
+        });     
 
 
 });
