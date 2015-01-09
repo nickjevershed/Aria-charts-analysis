@@ -1,0 +1,36 @@
+@font-face{
+	font-family: 'Guardian Text Egyptian Web';
+	font-weight: normal;
+	font-style: normal;
+	font-stretch: normal;
+	src: url('../fonts/WebEgyptianHinted-Regular.eot');
+	src: url('../fonts/WebEgyptianHinted-Regular.eot?#iefix') format('embedded-opentype'), url('../fonts/WebEgyptianHinted-Regular.woff') format('woff'), url('../fonts/WebEgyptianHinted-Regular.ttf') format('truetype'), url('../fonts/WebEgyptianHinted-Regular.svg#Guardian Text Egyptian Web') format('svg');
+}
+
+@font-face{
+	font-family: 'Guardian Egyptian Web';
+	font-weight: 200;
+	font-style: normal;
+	font-stretch: normal;
+	src: url('../fonts/Guardian-Egyp-Web-Light.eot');
+	src: url('../fonts/Guardian-Egyp-Web-Light.eot?#iefix') format('embedded-opentype'), url('../fonts/Guardian-Egyp-Web-Light.woff') format('woff'), url('../fonts/Guardian-Egyp-Web-Light.ttf') format('truetype'), url('../fonts/Guardian-Egyp-Web-Light.svg#Guardian-Egyp-Web-Light') format('svg');
+}
+@font-face{
+	font-family: 'Guardian Egyptian Web';
+	font-weight: normal;
+	font-style: normal;
+	font-stretch: normal;
+
+	src: url('../fonts/Guardian-Egyp-Web-Regular.eot');
+	src: url('../fonts/Guardian-Egyp-Web-Regular.eot?#iefix') format('embedded-opentype'), url('../fonts/Guardian-Egyp-Web-Regular.woff') format('woff'), url('../fonts/Guardian-Egyp-Web-Regular.ttf') format('truetype'), url('../fonts/Guardian-Egyp-Web-Regular.svg#Guardian-Egyp-Web-Regular') format('svg');
+}
+@font-face{
+	font-family: 'Guardian Egyptian Web';
+	font-weight: 900;
+	font-style: normal;
+	font-stretch: normal;
+
+	src: url('../fonts/Guardian-Egyp-Web-Semibold.eot');
+	src: url('../fonts/Guardian-Egyp-Web-Semibold.eot?#iefix') format('embedded-opentype'), url('../fonts/Guardian-Egyp-Web-Semibold.woff') format('woff'), url('../fonts/Guardian-Egyp-Web-Semibold.ttf') format('truetype'), url('../fonts/Guardian-Egyp-Web-Semibold.svg#Guardian-Egyp-Web-Semibold') format('svg');
+}
+
