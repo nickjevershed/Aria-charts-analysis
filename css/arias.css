@@ -117,6 +117,10 @@ display: inline-block;
 background-color: #bdbdbd !important;
 }
 
+.greyedOut {
+background-color: #bdbdbd !important;
+}
+
 #interactiveWrapper {
     max-width:1300px;
     margin-left: auto;
