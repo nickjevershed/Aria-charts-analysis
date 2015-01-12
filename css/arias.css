@@ -1,7 +1,7 @@
 body {
         margin:0px;
         padding:0px;
-        font-family:'Guardian Egyptian Web', 'Egyptian Display', Georgia, serif
+        font-family:'Guardian Egyptian Web', 'Egyptian Display', Georgia, serif;
         font-size:1em;
 }
 
@@ -91,6 +91,7 @@ margin-bottom: 10px;
   border-radius: 16px;
   text-align: center;
   padding: 5px 10px;
+  margin-bottom:5px; 
   line-height: 0.9rem; 
   font-family: "Guardian Agate Sans", Arial, sans-serif;
   overflow:hidden;
@@ -231,3 +232,34 @@ background-color:rgb(107,174,214);
 .blue4 {
 background-color:rgb(189,215,231);  
 }
+.dropcap {
+color: #4bc6df;
+float: left;
+margin: 0 4px 0 0;
+padding: 0;
+font-family: 'Guardian Egyptian Web', 'Egyptian Display', 'Volkhov', Georgia;
+font-size: 60px;
+font-weight: 500;
+line-height: 48px;
+}
+
+.caption {
+font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+color: #767676;
+font-size:0.75em;
+max-width: 704px;
+margin-left:auto;
+margin-right:auto; 
+}
+
+@media (max-width: 600px) {
+      body {
+        font-size:0.9em;
+      }
+  
+      .label, .axis {
+        font-size:0.7em;
+      }
+      
+
+      }

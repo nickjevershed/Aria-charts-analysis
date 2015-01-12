@@ -19,8 +19,10 @@
 
 <body>
 <div id="interactiveWrapper">
+<img src="img/hilltop.jpg" width="100%"/>
+<div class="caption">MC Pressure from the Australian duo Hilltop Hoods during their performance at the Splendour in the Grass music festival. Hip hop and electronic music are becoming more popular. Photograph: Dan Peled</div>
 
-<div class="interactiveText"><p>An analysis of the top singles charts for Australia since 1988 suggests rock and conventional band music is declining in popularity and that pop songs are getting shorter. </p>
+<div class="interactiveText"><p><span class="dropcap">A</span>n analysis of the top singles charts for Australia since 1988 suggests rock and conventional band music generally are declining in popularity and that pop songs are getting shorter. </p>
 
 <p>I have analysed the <a href='http://www.aria.com.au/pages/aria-charts-end-of-year-charts.htm' target='_blank'>Aria singles charts from 1988 to 2014</a> to get a sense of how our popular music is changing.</p>
 
@@ -150,7 +152,7 @@
 </div>
 
 <div class="interactiveText">
-<p>The most obvious trend is that, like our previous look at music genres in Triple J's hottest 100, the proportion of rock and other guitar-based music genres is declining. This is largely being driven by a corresponding increase in popularity of the urban and electronic genres. </p>
+<p>The most obvious trend is that, like our <a href='http://www.theguardian.com/news/datablog/interactive/2014/jan/23/hottest-100-every-genre-interactive' target='_blank'>previous look at music genres in Triple J's hottest 100</a>, the proportion of rock and other guitar-based music genres is declining. This is largely being driven by a corresponding increase in popularity of the urban and electronic genres. </p>
 
 <p>Dance music genres such as house and trance (as well as the generic “dance” genre) are enjoying a resurgence in recent years after peaks in the 90s and early 2000s. </p>
 
@@ -248,8 +250,11 @@
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/d3.min.js"></script>
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="http://interactive.guim.co.uk/libs/iframe-messenger/iframeMessenger.js" type="text/javascript"></script>
 
 <script>
+
+iframeMessenger.enableAutoResize();
 
 var genreNeat = "";
 
@@ -437,7 +442,7 @@ var graph = d3.csv("data/genres-percent-groups.csv", function(data) {
         .text(function(d) {return d['label']})
 
 
-  $( ".layer" ).tooltip({content:"<div class='infobox'></div>", track:true});
+  $( ".layer" ).tooltip({content:"<div class='infobox' onClick='tooltipClose();'></div>", track:true});
 
   svg.append("g")
       .attr("class", "x axis")
@@ -645,6 +650,9 @@ var graph = d3.csv("data/genres-percent-groups.csv", function(data) {
       .attr("stroke-width", "0px");
   })
 
+    function tooltipClose() {
+$(".infobox").tooltip('close');
+}
 
 });
 
@@ -711,7 +719,18 @@ d3.csv("data/duration-groups-en.csv", function(error, data) {
     .enter().append("circle")
       .attr("class", function(d) { return "dot " + d['group'] })
       .attr("opacity", "0.8")
-      .attr("r", 3.5)
+      .attr("r", function(d) { 
+
+        if (getW < 600) {
+          return 2
+        }
+
+        else {
+          return 3.5
+        }
+        
+
+      })
       .attr("title", function(d) {return d['title']})
       .attr("cx", function(d) { return x(d.year); })
       .attr("cy", function(d) { return y(d.duration); })
@@ -750,11 +769,15 @@ d3.csv("data/duration-groups-en.csv", function(error, data) {
  $("#durationGraphWrapper .dot").tooltip({
                 track: true,  
                   content: function() {
-                var elementData = d3.select(this)[0][0]['__data__'];
-                    return "<div class='infobox'><span class='infoboxHeader'>" + elementData['title'] + " - " + elementData['artist'] + "</span><br>Duration: " + elementData['duration'] + " seconds</div>";
+                  var elementData = d3.select(this)[0][0]['__data__'];
+                    return "<div class='infobox' onClick='tooltipClose();'><span class='infoboxHeader'>" + elementData['title'] + " - " + elementData['artist'] + "</span><br>Duration: " + elementData['duration'] + " seconds</div>";
                   }
                 });     
 
+
+function tooltipClose() {
+$("#durationGraphWrapper .dot").tooltip('close');
+}
 
  d3.selectAll("#durationGraphWrapper .btn").on("click", filterCat);
 
@@ -798,7 +821,7 @@ function filterCat() {
 
 function drawlabelColumn() {
 
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
+ var margin = {top: 10, right: 10, bottom: 30, left: 10},
     width = getW - margin.left - margin.right,
     height = getH - margin.top - margin.bottom;
 
@@ -911,11 +934,13 @@ var color = d3.scale.ordinal()
         track: true,  
           content: function() {
         var elementData = d3.select(this)[0][0]['__data__'];
-            return "<div class='infobox'><span class='infoboxHeader'>" + elementData['category'] + "</span><br>Proportion: " + elementData['y'].toFixed(2) + "%</div>";
+            return "<div class='infobox' onClick='tooltipClose();'><span class='infoboxHeader'>" + elementData['category'] + "</span><br>Proportion: " + elementData['y'].toFixed(2) + "%</div>";
           }
         });     
 
-
+  function tooltipClose() {
+$(".infobox").tooltip('close');
+}
 
 });
 
@@ -926,7 +951,7 @@ var color = d3.scale.ordinal()
 function drawCountryColumn() {
 
 
-  var margin = {top: 20, right: 20, bottom: 30, left: 40},
+  var margin = {top: 10, right: 10, bottom: 30, left: 10},
     width = getW - margin.left - margin.right,
     height = getH - margin.top - margin.bottom;
 
@@ -1038,9 +1063,13 @@ var color = d3.scale.ordinal()
         track: true,  
           content: function() {
         var elementData = d3.select(this)[0][0]['__data__'];
-            return "<div class='infobox'><span class='infoboxHeader'>" + elementData['category'] + "</span><br>Proportion: " + elementData['y'].toFixed(2) + "%</div>";
+            return "<div class='infobox' onClick='tooltipClose();'><span class='infoboxHeader'>" + elementData['category'] + "</span><br>Proportion: " + elementData['y'].toFixed(2) + "%</div>";
           }
         });     
+
+      function tooltipClose() {
+$(".infobox").tooltip('close');
+}
 
 
 });
