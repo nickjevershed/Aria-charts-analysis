@@ -20,37 +20,150 @@
 <body>
 <div id="interactiveWrapper">
 
-<div class="interactiveText">
-<p>The Australian government’s policy of mandatory detention for asylum seekers has benefited contractors by up to $10bn since mid-2007.</p>
-<p>Guardian Australia has conducted an analysis of contracts in the <a href="https://www.tenders.gov.au/" data-link-name="in body link" class=" u-underline" data-component="in-body-link">AusTender database</a> awarded by the Department of Immigration and containing keywords relating to the mandatory detention system. You can read more about the specific methods below.</p>
-<p>The analysis reveals for the first time the scale of the privatised detention system, with 1,770 contracts awarded to 522 entities.</p>
-<p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
+<div class="interactiveText"><p>An analysis of the top singles charts for Australia since 1988 suggests rock and conventional band music is declining in popularity and that pop songs are getting shorter. </p>
+
+<p>I have analysed the <a href='http://www.aria.com.au/pages/aria-charts-end-of-year-charts.htm' target='_blank'>Aria singles charts from 1988 to 2014</a> to get a sense of how our popular music is changing.</p>
+
+<p>The annual Aria charts are produced by the Australian Recording Industry Association, and track sales of singles from <a href='http://www.ariacharts.com.au/about/chart-stores' target='_blank'>a number of sources</a>, including bricks-and-mortar stores and online and streaming outlets such as iTunes and Spotify.   </p>
+
+<p>To examine music genres over time, I used <a href='http://developer.echonest.com/docs/v4'>the Echo Nest music classification service</a> to programmatically assign genres to each artist in the top 100, or top 50 for charts between 1988 and 1996. I took the first two genres associated with each artist, cleaned up the data to condense certain obscure genres into more familiar ones (eg. deep house and other house music sub-genres condensed to house), and then calculated the percentage of each genre in each year.</p>
+
+<p>This chart shows the proportion of each genre, with each genre loosely grouped into arbitrary categories of conventional band (i.e. music with guitars and regular instruments), pop music (anything falling under pop's various umbrellas regardless of instrumentation), electronic (most of the dance genres) and urban (primarily hip-hop, R&B, rap and soul).</p>
 </div>
 
 <div id="streamGraphWrapper">
   <div class="topbar"></div>
   <div class="chartTitle">Chart music genres over time</div>
   <div class="row">
-    <span id="toggleText">Click to zoom on group of genres</span>
+    <span id="toggleText">Click to zoom on group of genres, click a stream to isolate a genre, or select from this list: 
+    <select id="genreMenu">
+    <option value='adult_contemporary'>adult contemporary</option>
+<option value='alternative_metal'>alternative metal</option>
+<option value='alternative_rock'>alternative rock</option>
+<option value='ambient'>ambient</option>
+<option value='ballad'>ballad</option>
+<option value='bluegrass'>bluegrass</option>
+<option value='blues'>blues</option>
+<option value='boy_band'>boy band</option>
+<option value='breakbeat'>breakbeat</option>
+<option value='british_pop'>british pop</option>
+<option value='celtic'>celtic</option>
+<option value='children_music'>children music</option>
+<option value='christian'>christian</option>
+<option value='classic_rock'>classic rock</option>
+<option value='classical'>classical</option>
+<option value='club'>club</option>
+<option value='comedy'>comedy</option>
+<option value='country'>country</option>
+<option value='crunk'>crunk</option>
+<option value='dance'>dance</option>
+<option value='dance_pop'>dance pop</option>
+<option value='dancehall'>dancehall</option>
+<option value='disco'>disco</option>
+<option value='disney_music'>disney music</option>
+<option value='doo-wop'>doo-wop</option>
+<option value='downtempo'>downtempo</option>
+<option value='drum_and_bass'>drum and bass</option>
+<option value='dubstep'>dubstep</option>
+<option value='easy_listening'>easy listening</option>
+<option value='electro'>electro</option>
+<option value='electronic'>electronic</option>
+<option value='electropop'>electropop</option>
+<option value='emo'>emo</option>
+<option value='eurodance'>eurodance</option>
+<option value='europop'>europop</option>
+<option value='folk'>folk</option>
+<option value='funk'>funk</option>
+<option value='funk_rock'>funk rock</option>
+<option value='garage_rock'>garage rock</option>
+<option value='glam_rock'>glam rock</option>
+<option value='gospel'>gospel</option>
+<option value='grime'>grime</option>
+<option value='grunge'>grunge</option>
+<option value='hard_rock'>hard rock</option>
+<option value='hardcore'>hardcore</option>
+<option value='hardcore_punk'>hardcore punk</option>
+<option value='heavy_metal'>heavy metal</option>
+<option value='hip_hop'>hip hop</option>
+<option value='house'>house</option>
+<option value='indie_rock'>indie rock</option>
+<option value='jazz'>jazz</option>
+<option value='jazz_fusion'>jazz fusion</option>
+<option value='k_pop'>k pop</option>
+<option value='latin'>latin</option>
+<option value='male_vocalist'>male vocalist</option>
+<option value='melodic_rock'>melodic rock</option>
+<option value='metal'>metal</option>
+<option value='motown'>motown</option>
+<option value='new_age'>new age</option>
+<option value='new_jack_swing'>new jack swing</option>
+<option value='new_wave'>new wave</option>
+<option value='nu_metal'>nu metal</option>
+<option value='old_school'>old school</option>
+<option value='opera'>opera</option>
+<option value='parody'>parody</option>
+<option value='pop'>pop</option>
+<option value='pop_punk'>pop punk</option>
+<option value='pop_rock'>pop rock</option>
+<option value='post-punk'>post-punk</option>
+<option value='power_pop'>power pop</option>
+<option value='pub_rock'>pub rock</option>
+<option value='punk'>punk</option>
+<option value='r&b'>r&b</option>
+<option value='rap'>rap</option>
+<option value='rap_metal'>rap metal</option>
+<option value='rap_rock'>rap rock</option>
+<option value='reggae'>reggae</option>
+<option value='reggaeton'>reggaeton</option>
+<option value='rock'>rock</option>
+<option value='rockabilly'>rockabilly</option>
+<option value='singer-songwriter'>singer-songwriter</option>
+<option value='ska'>ska</option>
+<option value='soft_rock'>soft rock</option>
+<option value='soul'>soul</option>
+<option value='soundtrack'>soundtrack</option>
+<option value='surf_music'>surf music</option>
+<option value='swing'>swing</option>
+<option value='symphony'>symphony</option>
+<option value='synthpop'>synthpop</option>
+<option value='techno'>techno</option>
+<option value='teen_pop'>teen pop</option>
+<option value='trance'>trance</option>
+<option value='trip_hop'>trip hop</option>
+<option value='uk_garage'>uk garage</option>
+<option value='world'>world</option>
+</select>
+ </span>
   </div>
 
   <span id="streamGraphfilters" class="filter">
-    <span data-category="band" class="btn traditionalBand">Traditional band</span>
+    <span data-category="band" class="btn traditionalBand">Conventional band</span>
     <span data-category="electronic" class="btn electronic">Electronic</span>
     <span data-category="urban" class="btn urban">Urban</span>
     <span data-category="pop" class="btn popMusic">Pop music</span>
     <span data-category="other" class="btn other">Other</span>
   </span>
-  <span class="btn reset">Reset</span>   
+  <span class="btn reset">Reset</span>
+
   <div id="streamGraph" class="chart">
   </div>
 </div>
 
 <div class="interactiveText">
-<p>The Australian government’s policy of mandatory detention for asylum seekers has benefited contractors by up to $10bn since mid-2007.</p>
-<p>Guardian Australia has conducted an analysis of contracts in the <a href="https://www.tenders.gov.au/" data-link-name="in body link" class=" u-underline" data-component="in-body-link">AusTender database</a> awarded by the Department of Immigration and containing keywords relating to the mandatory detention system. You can read more about the specific methods below.</p>
-<p>The analysis reveals for the first time the scale of the privatised detention system, with 1,770 contracts awarded to 522 entities.</p>
-<p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
+<p>The most obvious trend is that, like our previous look at music genres in Triple J's hottest 100, the proportion of rock and other guitar-based music genres is declining. This is largely being driven by a corresponding increase in popularity of the urban and electronic genres. </p>
+
+<p>Dance music genres such as house and trance (as well as the generic “dance” genre) are enjoying a resurgence in recent years after peaks in the 90s and early 2000s. </p>
+
+<p>You can choose individual genre streams in the chart above to explore other trends. </p>
+
+<p>Looking at the length of tracks in the charts, it looks like songs are getting shorter on average. </p>
+
+<p>Unfortunately, it would be hard to definitively say the songs in the charts are getting shorter without scoring each track for duration by hand (which would take days). </p>
+
+<p>To get the duration, I used the same Echo Nest API to assign a length to each song. Doing this programmatically based on the song title and artist has a few issues: some songs have multiple versions, so it is tricky to always get the length of version that made it into the charts though the most popular version of the track should be the preferred version returned. Also some songs do not have a duration recorded, or the length is obviously incorrect. To reduce the errors from using a single service, I also extracted durations from the YouTube version of each song, as well as the duration of the first matching track on Last FM. </p>
+
+<p>All three datasets showed a trend from longer tracks to shorter over time. So, while individual songs may not have the right length, I'm pretty sure the overall trend is solid. Here's a view of song durations based on a combined dataset of the three, with a line showing the trend:</p>
+
 </div>
 
 
@@ -59,10 +172,10 @@
   <div class="topbar"></div>
   <div class="chartTitle">Chart music duration over time</div>
   <div class="row keyText">
-   <p>Click to toggle groups of genres</p>
+   <p>Click to toggle groups of genres. Duration determined programatically by API and may not reflect actual radio single duration</p>
   </div>
   <span id="durationScatterfilters" class="filter">
-    <span data-category="band" class="btn traditionalBand">Traditional band</span>
+    <span data-category="band" class="btn traditionalBand">Conventional band</span>
     <span data-category="electronic" class="btn electronic">Electronic</span>
     <span data-category="urban" class="btn urban">Urban</span>
     <span data-category="pop" class="btn popMusic">Pop music</span>
@@ -73,10 +186,13 @@
 </div>
 
 <div class="interactiveText">
-<p>The Australian government’s policy of mandatory detention for asylum seekers has benefited contractors by up to $10bn since mid-2007.</p>
-<p>Guardian Australia has conducted an analysis of contracts in the <a href="https://www.tenders.gov.au/" data-link-name="in body link" class=" u-underline" data-component="in-body-link">AusTender database</a> awarded by the Department of Immigration and containing keywords relating to the mandatory detention system. You can read more about the specific methods below.</p>
-<p>The analysis reveals for the first time the scale of the privatised detention system, with 1,770 contracts awarded to 522 entities.</p>
-<p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
+<p>The obvious outliers in length are the split singles such as Elton John's Candle in the Wind / Something About the Way You Look Tonight, and All Saints covers of Under the Bridge / Lady Marmalade. </p>
+
+<p>On the shorter side of things, Liam Lynch's United States of Whatever from 2003 was the shortest track to chart, at 89 seconds. The second-shortest track in the charts was also in the same year, Hey Hey What You Say, from the Saddle Club. </p>
+
+<p>Each entry in the Aria charts has the associated record label or company responsible for releasing the song in Australia. I scored each company as a major label, independent label, or public broadcaster based on information from music databases discogs.com and musicbrainz.org. Again, these proportions should be taken as estimates because the definition of “major” or “independent” is an arbitrary one. </p>
+
+<p>Some labels and companies were scored as unknown where I wasn't able to find any information about the label from the abbreviation on the Aria chart. However, it is likely these are mostly independent because the majors would be readily identifiable. </p>
 </div>
 
 <div id="labelGraphWrapper">
@@ -94,10 +210,12 @@
 </div>  
 
 <div class="interactiveText">
-<p>The Australian government’s policy of mandatory detention for asylum seekers has benefited contractors by up to $10bn since mid-2007.</p>
-<p>Guardian Australia has conducted an analysis of contracts in the <a href="https://www.tenders.gov.au/" data-link-name="in body link" class=" u-underline" data-component="in-body-link">AusTender database</a> awarded by the Department of Immigration and containing keywords relating to the mandatory detention system. You can read more about the specific methods below.</p>
-<p>The analysis reveals for the first time the scale of the privatised detention system, with 1,770 contracts awarded to 522 entities.</p>
-<p>The bulk of the funds have gone to service providers including Serco Australia, Transfield Services, International Health and Medical Services, G4S Australia, construction companies such as Canstruct and John Holland, and charities such as the Salvation Army.</p>
+<p>  The dominance of the major labels and record companies in popular music is still quite large, though independent labels have been making inroads into the charts since the mid-90s. </p>
+
+<p>The high point for releases outside the major companies was 2002, with a number of electronic music releases on Shock Records and Ministry of Sound, as well as a strong year for Jay Z's initially independent label Roc-A-Fella Records. </p>
+
+<p>Finally, a look at the proportion of Australian artists in the charts. Again, I used the Echo Nest API to classify the country of origin of each artist, and converted the results into percentages. The three largest countries of origin were the US, UK and Australia, with another 20 or so other countries (I've merged these into “other” for the purposes of the graph, but you can check out the full results in the spreadsheet).</p>
+
 </div>
 
 <div id="countryGraphWrapper">
@@ -115,6 +233,14 @@
   <div id="countryColumn" class="chart">
 
   </div>  
+
+  <div class="interactiveText">
+   <p> Australian artists make up a decent portion of the charts each year, though it is usually far less than American artists. Interestingly, 2014 has the lowest proportion of American artists, and it looks like this proportion has been declining since 2009. Last year was also a particularly strong year for the Brits, and other countries generally. </p>
+
+<p>Finally, a big caveat: as mentioned, the ability to produce these sorts of analyses in a reasonable period of time relies on classifying tracks programmatically, with all the associated issues. I've no doubt there are entries in the data that have been mis-classified, or use the wrong duration or artist due to a mismatch. If you spot an error, you can fork the dataset on GitHub to fix it, or for those less technically inclined, you can <a href='https://docs.google.com/spreadsheets/d/1iUY17-FbO5Ca8zWOIEbomUq-Zmb1QlVQqF_H1WZ8I-U/edit?usp=sharing' target='_blank'>duplicate the Google Doc spreadsheet here</a>.</p>
+  </div>  
+
+
 </div>
 
 </div>
@@ -379,6 +505,34 @@ var graph = d3.csv("data/genres-percent-groups.csv", function(data) {
 
   d3.selectAll("#streamGraphfilters .btn").on("click", filterCat);
 
+  d3.select("#genreMenu").on("change", filterGenre);
+
+  function filterGenre() {
+
+      $("#streamGraphWrapper .reset").fadeIn().css("display","inline-block");
+      $("#streamGraphWrapper .streamLabel").fadeOut();
+      $("#streamGraphWrapper .streamLabelShadow").fadeOut();
+
+      genreID = d3.select(this).node().value;
+      console.log(genreID);
+      genreData = stackArea(layers.filter(function(d) { return d.key == genreID.replace('_',' ') }));
+
+      var selected = svg.selectAll(".layer").data(genreData, function(d){ return d.key.replace(/[\s\.]/g,'_') } )
+
+      selected.exit()
+        .transition()
+          .attr("d","M0,0");
+
+      selected
+        .attr("d", function(d) { 
+        return area(d.values); });   
+
+      genreNeat = genreID.replace('_',' ');  
+      clickTo = "";
+
+
+  }
+
   function filterCat() {
 
                 $("#streamGraphWrapper .reset").fadeIn().css("display","inline-block");
@@ -526,7 +680,7 @@ var svg = d3.select("#durationScatter").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("data/duration-groups.csv", function(error, data) {
+d3.csv("data/duration-groups-en.csv", function(error, data) {
   data.forEach(function(d) {
     d.duration = +d.duration;
   });
@@ -586,9 +740,9 @@ d3.csv("data/duration-groups.csv", function(error, data) {
   svg.append("line")
       .attr("class", "trendline")
       .attr("x1", function(d) { return x(1988); })
-      .attr("y1", function(d) { return y(263.2); })
+      .attr("y1", function(d) { return y(255); })
       .attr("x2", function(d) { return x(2014); })
-      .attr("y2", function(d) { return y(220.3); })
+      .attr("y2", function(d) { return y(225); })
       .attr("stroke", "black")
       .attr("stroke-width", 1);    
 
@@ -672,7 +826,7 @@ var svg = d3.select("#labelColumn").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("data/label-percents.csv", function(error, data) {
+d3.csv("data/label-percents2.csv", function(error, data) {
 
 var headers = ["Major","Independent","Unknown","Public broadcaster"];
 
